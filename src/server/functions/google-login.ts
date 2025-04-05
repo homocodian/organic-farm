@@ -1,8 +1,11 @@
 "use server";
 
+import "server-only";
+
 import { auth } from "@/lib/auth";
 import { APIError } from "better-auth/api";
 import { redirect } from "next/navigation";
+import { AppConfig } from "@/lib/app-config";
 
 type SocialSession = Awaited<
 	ReturnType<
@@ -24,8 +27,8 @@ export async function googleLogin() {
 	try {
 		session = await auth.api.signInSocial({
 			body: {
-				callbackURL: "/",
-				newUserCallbackURL: "/",
+				callbackURL: AppConfig.callbackURL,
+				newUserCallbackURL: AppConfig.onboardingRoute,
 				provider: "google",
 			},
 		});

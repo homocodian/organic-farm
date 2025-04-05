@@ -1,8 +1,11 @@
 "use server";
 
+import "server-only";
+
 import { auth } from "@/lib/auth";
 import { APIError } from "better-auth/api";
 import { redirect } from "next/navigation";
+import { AppConfig } from "@/lib/app-config";
 
 export async function register(
 	previousState: unknown,
@@ -27,7 +30,7 @@ export async function register(
 		errors.push("Password is required");
 	}
 
-	if (password !== confirmPassword) {
+	if (password && password !== confirmPassword) {
 		errors.push("Passwords do not match");
 	}
 
@@ -52,5 +55,5 @@ export async function register(
 		return ["Something went wrong. Please try again later."];
 	}
 
-	redirect("/");
+	redirect(AppConfig.onboardingRoute);
 }

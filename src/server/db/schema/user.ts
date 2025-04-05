@@ -1,4 +1,13 @@
-import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
+import { pgTable, text, timestamp, boolean, pgEnum } from "drizzle-orm/pg-core";
+import { address } from "./address";
+import { supplier } from "./supplier";
+import { cart } from "./cart";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+
+export const userRole = pgEnum("role", ["buyer", "seller", "supplier"]);
+
+export const userRoles = userRole.enumValues;
 
 export const user = pgTable("user", {
 	id: text("id").primaryKey(),
@@ -6,6 +15,10 @@ export const user = pgTable("user", {
 	email: text("email").notNull().unique(),
 	emailVerified: boolean("email_verified").notNull(),
 	image: text("image"),
+	phone: text("phone"),
+	role: userRole("role").notNull().default("buyer"),
+	onboardingCompleted: boolean("onboarding_completed").notNull().default(false),
+	alternatePhone: text("alternate_phone"),
 	createdAt: timestamp("created_at").notNull(),
 	updatedAt: timestamp("updated_at").notNull(),
 });
@@ -49,3 +62,24 @@ export const verification = pgTable("verification", {
 	createdAt: timestamp("created_at"),
 	updatedAt: timestamp("updated_at"),
 });
+
+export const userRelations = relations(user, ({ one, many }) => ({
+	supplier: one(supplier),
+	addresses: many(address),
+	cart: one(cart, {
+		fields: [user.id],
+		references: [cart.userId],
+	}),
+}));
+
+export const userInsertSchema = createInsertSchema(user).omit({
+	id: true,
+	emailVerified: true,
+	createdAt: true,
+	updatedAt: true,
+	email: true,
+});
+export type UserInsertSchema = typeof userInsertSchema._type;
+
+export const userSelectSchema = createSelectSchema(user);
+export type UserSelectSchema = typeof userSelectSchema._type;

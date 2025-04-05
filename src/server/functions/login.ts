@@ -1,8 +1,11 @@
 "use server";
 
+import "server-only";
+
 import { auth } from "@/lib/auth";
 import { APIError } from "better-auth/api";
 import { redirect } from "next/navigation";
+import { AppConfig } from "@/lib/app-config";
 
 export async function login(
 	previousState: unknown,
@@ -41,5 +44,5 @@ export async function login(
 		return ["Something went wrong. Please try again later."];
 	}
 
-	redirect("/");
+	redirect(AppConfig.callbackURL);
 }
