@@ -1,13 +1,14 @@
 import { Combobox } from "@/components/combobox";
 import { states } from "@/lib/data/states";
 import { useFieldContext } from "./form";
+import { Label } from "@/components/ui/label";
 
 export function StateField() {
 	const field = useFieldContext<string>();
 
 	return (
 		<div className="grid gap-2">
-			{/* <Label htmlFor="state">State</Label> */}
+			<Label htmlFor="state">State</Label>
 			<Combobox
 				value={field.state.value}
 				setValueAction={(v) => field.handleChange(v)}

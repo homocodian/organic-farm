@@ -7,6 +7,7 @@ import { EmptyCart } from "./_components/empty";
 import { getCurrentUser } from "@/lib/session";
 import { cart as cartTable } from "@/server/db/schema/cart";
 import { Cart } from "./_components/cart";
+import { Header } from "@/components/header";
 
 export default async function CartPage() {
 	const user = await getCurrentUser();
@@ -31,12 +32,15 @@ export default async function CartPage() {
 	}
 
 	return (
-		<div className="container mx-auto px-4 py-12 md:py-16">
-			<div className="flex items-center gap-2 mb-8">
-				<ShoppingCart className="h-6 w-6" />
-				<h1 className="text-3xl font-bold tracking-tight">Your Cart</h1>
+		<>
+			<Header showCart={false} />
+			<div className="container mx-auto px-4 py-12 md:py-16">
+				<div className="flex items-center gap-2 mb-8">
+					<ShoppingCart className="h-6 w-6" />
+					<h1 className="text-3xl font-bold tracking-tight">Your Cart</h1>
+				</div>
+				<Cart cartItems={cart.cartItems} />
 			</div>
-			<Cart cartItems={cart.cartItems} />
-		</div>
+		</>
 	);
 }

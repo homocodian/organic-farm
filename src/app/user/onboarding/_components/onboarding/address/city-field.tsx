@@ -3,6 +3,7 @@ import { useStore } from "@tanstack/react-form";
 import { Combobox } from "@/components/combobox";
 import { useEffect, useState } from "react";
 import { useFieldContext, useFormContext } from "./form";
+import { Label } from "@/components/ui/label";
 
 export function CityField() {
 	const field = useFieldContext<string>();
@@ -37,7 +38,7 @@ export function CityField() {
 
 	return (
 		<div className="grid gap-2">
-			{/* <Label htmlFor="city">City/District</Label> */}
+			<Label htmlFor="city">City/District</Label>
 			<Combobox
 				value={field.state.value}
 				setValueAction={(v) => field.handleChange(v)}

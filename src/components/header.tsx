@@ -7,14 +7,18 @@ import {
 	NavigationMenuLink,
 	NavigationMenuList,
 	NavigationMenuTrigger,
-} from "../ui/navigation-menu";
-import { Button } from "../ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+} from "./ui/navigation-menu";
+import { Button } from "./ui/button";
 import { Suspense } from "react";
-import { ModeToggle } from "../mode-toggle";
-import { CartCount } from "./cart-count";
+import { ModeToggle } from "./mode-toggle";
+import { CartCount } from "./landing/cart-count";
+import { UserAccount } from "./user-account";
 
-export function Header() {
+export type HeaderProps = {
+	showCart?: boolean;
+};
+
+export function Header({ showCart = true }: HeaderProps) {
 	return (
 		<header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
 			<div className="container mx-auto flex h-16 items-center justify-between">
@@ -103,20 +107,17 @@ export function Header() {
 					</NavigationMenu>
 				</div>
 				<div className="flex items-center gap-4">
-					<Button variant="ghost" size="icon" className="relative">
-						<Avatar className="h-8 w-8">
-							<AvatarImage src="/placeholder.svg" alt="User" />
-							<AvatarFallback>U</AvatarFallback>
-						</Avatar>
-					</Button>
-					<Button variant="outline" size="icon" className="relative" asChild>
-						<Link href="/cart">
-							<ShoppingCart className="h-5 w-5" />
-							<Suspense>
-								<CartCount />
-							</Suspense>
-						</Link>
-					</Button>
+					<UserAccount />
+					{showCart && (
+						<Button variant="outline" size="icon" className="relative" asChild>
+							<Link href="/cart">
+								<ShoppingCart className="h-5 w-5" />
+								<Suspense>
+									<CartCount />
+								</Suspense>
+							</Link>
+						</Button>
+					)}
 					<ModeToggle />
 				</div>
 			</div>

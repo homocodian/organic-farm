@@ -1,6 +1,7 @@
 import { ProductListing } from "./_components/product-listings";
 import { unstable_cache } from "next/cache";
 import { db } from "@/server/db";
+import { Header } from "@/components/header";
 
 const getProducts = unstable_cache(
 	async () => {
@@ -20,8 +21,11 @@ const getProducts = unstable_cache(
 export default async function ProductListingPage() {
 	const products = await getProducts();
 	return (
-		<main>
-			<ProductListing products={products} />
-		</main>
+		<>
+			<Header />
+			<main>
+				<ProductListing products={products} />
+			</main>
+		</>
 	);
 }
