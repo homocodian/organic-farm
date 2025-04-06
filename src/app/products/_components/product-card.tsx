@@ -1,18 +1,19 @@
 import Image from "next/image";
 // import { Star } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Product } from "@/server/db/schema/product";
+import { AddToCart } from "./add-to-cart";
+import { AppConfig } from "@/lib/app-config";
 
 interface ProductCardProps {
 	product: Product;
 }
 
-export default function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product }: ProductCardProps) {
 	return (
 		<div className="bg-card rounded-lg overflow-hidden border hover:shadow-md transition-shadow">
 			<div className="relative h-48 bg-gray-100">
 				<Image
-					src={"/placeholder.svg"}
+					src={AppConfig.placeholderImages[1]}
 					alt={product.name}
 					fill
 					className="object-cover"
@@ -48,9 +49,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 					<span className="font-semibold">
 						₹{`${product.amount.toFixed(2)}/${product.quantityType}`}
 					</span>
-					<Button size="sm" variant="outline">
-						Add to cart
-					</Button>
+					<AddToCart productId={product.id} />
 				</div>
 			</div>
 		</div>

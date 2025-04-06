@@ -5,4 +5,5 @@ export const AppConfig = {
 		"their organic produce and promoting organic farming and its benefits.",
 	onboardingRoute: "/user/onboarding",
 	callbackURL: "/",
+	placeholderImages: ["/placeholder.jpeg", "/placeholder.png"],
 };

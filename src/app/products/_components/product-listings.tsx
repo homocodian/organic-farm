@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import ProductCard from "./product-card";
+import { ProductCard } from "./product-card";
 import { FilterSidebar } from "./filter-sidebar";
 import { ShoppingBag } from "lucide-react";
 import {

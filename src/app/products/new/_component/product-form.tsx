@@ -30,7 +30,6 @@ export function ProductForm() {
 		onSubmit: async (values) => {
 			const res = await createProduct(values.value);
 			if (res?.data) {
-				router.push("/");
 				router.push("/products");
 			} else {
 				if (Array.isArray(res?.error)) {
