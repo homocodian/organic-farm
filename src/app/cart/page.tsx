@@ -27,19 +27,21 @@ export default async function CartPage() {
 		},
 	});
 
-	if (!cart) {
-		return <EmptyCart />;
-	}
-
 	return (
 		<>
 			<Header showCart={false} />
 			<div className="container mx-auto px-4 py-12 md:py-16">
-				<div className="flex items-center gap-2 mb-8">
-					<ShoppingCart className="h-6 w-6" />
-					<h1 className="text-3xl font-bold tracking-tight">Your Cart</h1>
-				</div>
-				<Cart cartItems={cart.cartItems} />
+				{cart ? (
+					<>
+						<div className="flex items-center gap-2 mb-8">
+							<ShoppingCart className="h-6 w-6" />
+							<h1 className="text-3xl font-bold tracking-tight">Your Cart</h1>
+						</div>
+						<Cart cartItems={cart.cartItems} />
+					</>
+				) : (
+					<EmptyCart />
+				)}
 			</div>
 		</>
 	);
