@@ -10,6 +10,7 @@ import {
 import { user } from "./user";
 import { relations } from "drizzle-orm";
 import { cartItem } from "./cart";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 export const productCategory = pgEnum("product_category", [
 	"Machinery",
@@ -28,6 +29,8 @@ export const productCategory = pgEnum("product_category", [
 	"Others",
 ]);
 
+export const productCategories = productCategory.enumValues;
+
 export const productType = pgEnum("product_type", [
 	"Purchasable",
 	"Rentable",
@@ -35,11 +38,15 @@ export const productType = pgEnum("product_type", [
 	"Biddable",
 ]);
 
+export const productTypes = productType.enumValues;
+
 export const quantityType = pgEnum("product_quantity_type", [
 	"Kg",
 	"Quintal",
 	"Hours",
 ]);
+
+export const quantityTypes = quantityType.enumValues;
 
 export const product = pgTable(
 	"product",
@@ -48,8 +55,10 @@ export const product = pgTable(
 		name: text("name").notNull(),
 		description: text("description").notNull(),
 		category: productCategory("category").notNull(),
-		quatityType: productType("quantity_type").notNull(),
+		quantityType: quantityType("quantity_type").notNull(),
 		amount: real("amount").notNull(),
+		type: productType("type").notNull(),
+
 		userId: text("user_id")
 			.notNull()
 			.references(() => user.id, { onDelete: "cascade" }),
@@ -71,3 +80,19 @@ export const productRelations = relations(product, ({ one, many }) => ({
 	}),
 	cartItems: many(cartItem),
 }));
+
+export const productInsertSchema = createInsertSchema(product).omit({
+	id: true,
+	createdAt: true,
+	updatedAt: true,
+	userId: true,
+});
+
+export type ProductInsertSchema = typeof productInsertSchema._type;
+
+export const productSelectSchema = createSelectSchema(product);
+export type Product = typeof productSelectSchema._type;
+export type RawProduct = Omit<Product, "createdAt" | "updatedAt"> & {
+	createdAt: string;
+	updatedAt: string;
+};

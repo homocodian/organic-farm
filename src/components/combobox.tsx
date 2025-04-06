@@ -19,7 +19,7 @@ import {
 	PopoverTrigger,
 } from "@/components/ui/popover";
 
-type ComboboxProps = {
+export type ComboboxProps = {
 	value: string;
 	setValueAction: (value: string) => void;
 	selectPlaceholderText: string;
@@ -52,9 +52,13 @@ export function Combobox({
 						triggerButtonProps?.className
 					)}
 				>
-					{value
-						? data.find((item) => item.toLowerCase() === value.toLowerCase())
-						: selectPlaceholderText}
+					{value ? (
+						data.find((item) => item.toLowerCase() === value.toLowerCase())
+					) : (
+						<span className="text-muted-foreground">
+							{selectPlaceholderText}
+						</span>
+					)}
 					<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
 				</Button>
 			</PopoverTrigger>

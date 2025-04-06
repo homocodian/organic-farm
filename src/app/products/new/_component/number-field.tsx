@@ -11,14 +11,23 @@ interface NumberFieldProps
 		"type" | "value" | "onChange"
 	> {
 	label: string;
+	type?: "number" | "price";
 }
 
-export function NumberField({ label, className, ...props }: NumberFieldProps) {
+export function NumberField({
+	label,
+	className,
+	type = "number",
+	...props
+}: NumberFieldProps) {
 	const field = useFieldContext<number>();
 
 	return (
 		<div className="grid gap-2">
-			<Label htmlFor={props.id}> {label}</Label>
+			<Label htmlFor={props.id}>
+				{type === "number" ? label : `${label} (₹)`}
+			</Label>
+
 			<Input
 				{...props}
 				type="number"

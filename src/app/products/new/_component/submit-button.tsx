@@ -1,6 +1,7 @@
+import { Loader2 } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { useFormContext } from "./form";
-import { Loader2 } from "lucide-react";
 
 export function SubmitButton() {
 	const form = useFormContext();

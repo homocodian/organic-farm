@@ -1,7 +1,9 @@
 import { auth } from "@/lib/auth";
-import { MiddlewareHandler } from "hono";
+import { createMiddleware } from "hono/factory";
 
-export const authHandler: MiddlewareHandler = async (c, next) => {
+export const authHandler = createMiddleware(async (c, next) => {
+	console.log("🚀 ~ authHandler:MiddlewareHandler");
+
 	try {
 		const session = await auth.api.getSession({
 			headers: c.req.raw.headers,
@@ -19,4 +21,4 @@ export const authHandler: MiddlewareHandler = async (c, next) => {
 	}
 
 	await next();
-};
+});

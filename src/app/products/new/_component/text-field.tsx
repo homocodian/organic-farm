@@ -1,34 +1,24 @@
-import React from "react";
-
-import { useFieldContext } from "./form";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
+import { useFieldContext } from "./form";
 
-interface NumberFieldProps
+interface TextFieldProps
 	extends Omit<
 		React.InputHTMLAttributes<HTMLInputElement>,
-		"type" | "value" | "onChange"
+		"value" | "onChange"
 	> {
 	label: string;
 }
 
-export function NumberField({ label, className, ...props }: NumberFieldProps) {
-	const field = useFieldContext<number>();
-
+export function TextField({ label, ...props }: TextFieldProps) {
+	const field = useFieldContext<string>();
 	return (
 		<div className="grid gap-2">
-			<Label htmlFor={props.id}> {label}</Label>
+			<Label htmlFor={props.id}>{label}</Label>
 			<Input
-				{...props}
-				type="number"
-				id={field.name}
 				value={field.state.value}
-				onChange={(e) => field.handleChange(e.target.valueAsNumber)}
-				className={cn(
-					"[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none",
-					className
-				)}
+				onChange={(e) => field.handleChange(e.target.value)}
+				{...props}
 			/>
 			{field.state.meta.errors.length > 0 ? (
 				<div className="rounded-md border border-destructive bg-destructive/10 p-4 text-destructive">

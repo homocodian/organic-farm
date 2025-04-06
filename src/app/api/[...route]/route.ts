@@ -1,5 +1,6 @@
 import { AppConfig } from "@/lib/app-config";
 import { auth } from "@/lib/auth";
+import { product } from "@/server/route/product";
 import { user } from "@/server/route/user";
 import { Hono } from "hono";
 import { handle } from "hono/vercel";
@@ -13,7 +14,8 @@ const app = new Hono()
 			message: `${AppConfig.name} is running on ${process.env.NODE_ENV} environment`,
 		});
 	})
-	.route("/user", user);
+	.route("/user", user)
+	.route("/products", product);
 
 app.on(["POST", "GET"], "/auth/*", (c) => {
 	return auth.handler(c.req.raw);
