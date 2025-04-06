@@ -8,9 +8,9 @@ import {
 	quantityTypes,
 } from "@/server/db/schema/product";
 import { useProductForm } from "./form";
-import { api } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { createProduct } from "@/server/functions/products";
 
 export function ProductForm() {
 	const router = useRouter();
@@ -28,18 +28,16 @@ export function ProductForm() {
 			onSubmit: productInsertSchema,
 		},
 		onSubmit: async (values) => {
-			console.log("Form values", values);
-
-			const res = await api.products.$post({
-				json: values.value,
-			});
-
-			if (res.ok) {
-				const data = await res.json();
-				console.log("🚀 ~ onSubmit: ~ data:", data);
+			const res = await createProduct(values.value);
+			if (res?.data) {
 				router.push("/");
+				router.push("/products");
 			} else {
-				toast.error("Error creating product");
+				if (Array.isArray(res?.error)) {
+					res.error.forEach((error) => toast.error(error));
+				} else {
+					toast.error(res?.error ?? "Failed to create product");
+				}
 			}
 		},
 	});
