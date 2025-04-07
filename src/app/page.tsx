@@ -1,19 +1,21 @@
 import { Header } from "@/components/header";
-import { Footer } from "@/components/landing/footer";
-import { Hero } from "@/components/landing/hero-section";
-import { Information } from "@/components/landing/info-section";
-import { LearnMode } from "@/components/landing/about-section";
-import { Community } from "@/components/landing/community-section";
+import HeroSection from "./_components/hero-section";
+import FeaturesSection from "./_components/features-section";
+import HowItWorks from "./_components/how-it-works";
+import TestimonialsSection from "./_components/testimonials-section";
+import CtaSection from "./_components/cta-section";
+import Footer from "./_components/footer";
 
-export default function Home() {
+export default function LandingPage() {
 	return (
 		<div className="flex min-h-screen flex-col">
 			<Header />
 			<main className="flex-1">
-				<Hero />
-				<Information />
-				<LearnMode />
-				<Community />
+				<HeroSection />
+				<FeaturesSection />
+				<HowItWorks />
+				<TestimonialsSection />
+				<CtaSection />
 			</main>
 			<Footer />
 		</div>

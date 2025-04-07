@@ -20,6 +20,15 @@ export const auth = betterAuth({
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
 		},
 	},
+	user: {
+		additionalFields: {
+			role: {
+				type: "string",
+				nullable: false,
+				default: "buyer",
+			},
+		},
+	},
 	// make sure nextCookies is the last plugin in the array
 	plugins: [
 		customSession(async ({ user, session }) => {

@@ -8,6 +8,7 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 export const userRole = pgEnum("role", ["buyer", "seller", "supplier"]);
 
 export const userRoles = userRole.enumValues;
+export type UserRole = (typeof userRoles)[number];
 
 export const user = pgTable("user", {
 	id: text("id").primaryKey(),

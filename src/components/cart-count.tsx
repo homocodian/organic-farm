@@ -1,8 +1,8 @@
 import { db } from "@/server/db";
 import { cart, cartItem } from "@/server/db/schema/cart";
 import { eq, sql } from "drizzle-orm";
-import { Badge } from "../ui/badge";
 import { getCurrentUser } from "@/lib/session";
+import { Badge } from "./ui/badge";
 
 export async function CartCount() {
 	const user = await getCurrentUser();

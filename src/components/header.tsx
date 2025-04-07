@@ -11,9 +11,9 @@ import {
 import { Button } from "./ui/button";
 import { Suspense } from "react";
 import { ModeToggle } from "./mode-toggle";
-import { CartCount } from "./landing/cart-count";
 import { UserAccount } from "./user-account";
 import { AppConfig } from "@/lib/app-config";
+import { CartCount } from "@/components/cart-count";
 
 export type HeaderProps = {
 	showCart?: boolean;

@@ -1,8 +1,9 @@
 "use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { AppConfig } from "@/lib/app-config";
 import { motion } from "framer-motion";
 
 export function Community() {
@@ -36,7 +37,7 @@ export function Community() {
 							Testimonials
 						</Badge>
 						<p className="text-gray-600 md:text-xl/relaxed dark:text-muted-foreground">
-							&quot;I&#39;ve been ordering from OrganicHarvest for over a year
+							&quot;I&#39;ve been ordering from {AppConfig.name} for over a year
 							now, and the quality of their produce is consistently excellent.
 							The vegetables taste like they should - full of flavor and
 							freshness!&quot;

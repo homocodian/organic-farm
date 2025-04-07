@@ -27,7 +27,7 @@ export async function googleLogin() {
 	try {
 		session = await auth.api.signInSocial({
 			body: {
-				callbackURL: AppConfig.callbackURL,
+				callbackURL: "/reconfirm",
 				newUserCallbackURL: AppConfig.onboardingRoute,
 				provider: "google",
 			},

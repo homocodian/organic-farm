@@ -4,6 +4,7 @@
     "": {
       "name": "organic-farm",
       "dependencies": {
+        "@better-fetch/fetch": "^1.1.18",
         "@hono/zod-validator": "^0.4.3",
         "@radix-ui/react-avatar": "^1.1.3",
         "@radix-ui/react-checkbox": "^1.1.4",

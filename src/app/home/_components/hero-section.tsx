@@ -1,8 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -69,7 +69,7 @@ export function Hero() {
 						className="relative h-[300px] sm:h-[400px] lg:h-[500px] rounded-xl overflow-hidden"
 					>
 						<Image
-							src="/placeholder.jpeg?height=500&width=500"
+							src="/hero.png?height=500&width=500"
 							alt="Organic vegetables"
 							fill
 							className="object-cover"

@@ -1,0 +1,306 @@
+{
+    "farmItems": [
+      {
+        "id": 1,
+        "name": "Wheat",
+        "description": "Premium wheat ideal for chapati and bakery use.",
+        "category": "Cereal",
+        "quantityType": "quintal",
+        "amount": 2500,
+        "type": "purchasable",
+        "imageURL": "/images/wheat.jpg"
+      },
+      {
+        "id": 2,
+        "name": "Sugarcane",
+        "description": "Fresh sugarcane used for juice and jaggery.",
+        "category": "Sugar Crop",
+        "quantityType": "quintal",
+        "amount": 2800,
+        "type": "purchasable",
+        "imageURL": "https://t3.ftcdn.net/jpg/02/22/60/84/240_F_222608441_WrtmhNMKDUloph2ev1SQJzA6WROcYHlv.jpg"
+      },
+      {
+        "id": 3,
+        "name": "Cotton Bale",
+        "description": "Clean and ginned cotton bale for textile mills.",
+        "category": "Fibre Crops",
+        "quantityType": "bale",
+        "amount": 1500,
+        "type": "purchasable",
+        "imageURL": "https://media.gettyimages.com/id/91056119/photo/cotton-field.jpg?s=612x612&w=0&k=20&c=D7v1KkotT3ig66vNeo5Qb6BcR2KVYhvKmU66ye6NeUs="
+      },
+      {
+        "id": 4,
+        "name": "Foxtail Millet",
+        "description": "Organic foxtail millet packed in bags.",
+        "category": "Millets",
+        "quantityType": "kg",
+        "amount": 65,
+        "type": "purchasable",
+        "imageURL": "https://media.istockphoto.com/id/1445727438/photo/millet-and-wood-spoon.jpg?s=612x612&w=0&k=20&c=hEU1OdXqQOestTtUF4AE5RZWtnNXjEym81vJVN5yk14="
+      },
+      {
+        "id": 5,
+        "name": "Desi Cow Milk",
+        "description": "Pure A2 milk from grass-fed desi cows.",
+        "category": "Dairy Products",
+        "quantityType": "litre",
+        "amount": 60,
+        "type": "purchasable",
+        "imageURL": "https://images.unsplash.com/photo-1523473827533-2a64d0d36748?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8bWlsa3xlbnwwfHwwfHx8MA%3D%3D"
+      },
+      {
+        "id": 6,
+        "name": "Rotavator",
+        "description": "Rotavator for field preparation available for rent.",
+        "category": "Machinery",
+        "quantityType": "hours",
+        "amount": 400,
+        "type": "rentable",
+        "imageURL": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXNOzI0kji2molvV9FrmLmJH_AcltV64n1fg&s"
+      },
+      {
+        "id": 7,
+        "name": "Tractor",
+        "description": "60 HP tractor available on rent with driver.",
+        "category": "Machinery",
+        "quantityType": "hours",
+        "amount": 600,
+        "type": "rentable",
+        "imageURL": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3ZYH4jXTj73wwoOPVvzGSoZlR7K8mDlVbuw&s"
+      },
+      {
+        "id": 8,
+        "name": "Diesel Water Pump",
+        "description": "Portable diesel water pump for field irrigation.",
+        "category": "Machinery",
+        "quantityType": "hours",
+        "amount": 150,
+        "type": "rentable",
+        "imageURL": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuu6L-eP9kYm6ZAAWEZsT2kU600DsbYIx1Pw&s"
+      },
+      {
+        "id": 9,
+        "name": "Seed Drill",
+        "description": "Seed drill machine for sowing operations.",
+        "category": "Machinery",
+        "quantityType": "hours",
+        "amount": 250,
+        "type": "rentable",
+        "imageURL": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSFWdbNfLkWIZEOLb2q2azVfLvIfp30fd9uA&s"
+      },
+      {
+        "id": 10,
+        "name": "Power Weeder",
+        "description": "Used to control weeds in the field effectively.",
+        "category": "Machinery",
+        "quantityType": "hours",
+        "amount": 300,
+        "type": "rentable",
+        "imageURL": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRep9TqA0aG_OSnz2wiaG5HbiI4dDV_xwMhOw&s"
+      },
+      {
+        "id": 11,
+        "name": "Paddy Transplanting Service",
+        "description": "Skilled labor and tools for paddy transplanting.",
+        "category": "Contract",
+        "quantityType": "acre",
+        "amount": 4000,
+        "type": "contract",
+        "imageURL": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRn6p7kE9BXQRC_CwNdIZOPhFgXAewBOHMbog&s"
+      },
+      {
+        "id": 12,
+        "name": "Drip Irrigation Installation",
+        "description": "Full-service drip irrigation setup.",
+        "category": "Contract",
+        "quantityType": "acre",
+        "amount": 10000,
+        "type": "contract",
+        "imageURL": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDxR3zwOw-naGM0IPEMHIpkvsd2OnWmYZuNw&s"
+      },
+      {
+        "id": 13,
+        "name": "Soil Health Testing",
+        "description": "Comprehensive soil health and nutrient test.",
+        "category": "Contract",
+        "quantityType": "unit",
+        "amount": 1000,
+        "type": "contract",
+        "imageURL": "https://www.microlit.com/wp-content/uploads/2022/01/Soil-Testing-Feature-Image-1280-X-960-1024x768-1.jpg"
+      },
+      {
+        "id": 14,
+        "name": "Organic Certification",
+        "description": "Documentation and inspection support for organic farming certification.",
+        "category": "Contract",
+        "quantityType": "unit",
+        "amount": 8000,
+        "type": "contract",
+        "imageURL": "https://lh3.googleusercontent.com/proxy/SKBbw3gh1t3iVr04lcLjESWF2AZ8h6enmqOTBIev1hmPaP1vIIak4YdCuDn-7msvWkueMSf8M8J8K6FHPEsAfFp47TUMlflLTgXAvwEI2i8mIPCFLZ5AP24F6VpAm16YwQ"
+      },
+      {
+        "id": 15,
+        "name": "Crop Insurance Consulting",
+        "description": "Expert support in applying for farm insurance.",
+        "category": "Contract",
+        "quantityType": "unit",
+        "amount": 1200,
+        "type": "contract",
+        "imageURL": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXB0HmMZTfFNbEzsfpj9N0J4QQejmeMc7y_w&s"
+      },
+      {
+        "id": 16,
+        "name": "Buffalo",
+        "description": "High milk yield buffalo, ideal for dairy.",
+        "category": "Livestock",
+        "quantityType": "unit",
+        "amount": 55000,
+        "type": "biddable",
+        "imageURL": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDp02arYAeu2UCtDNBSHp6fkLNps0bRBb58Q&s"
+      },
+      {
+        "id": 17,
+        "name": "Milking Machine",
+        "description": "Electric milking machine for small dairy farms.",
+        "category": "Machinery",
+        "quantityType": "unit",
+        "amount": 32000,
+        "type": "biddable",
+        "imageURL": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCNhAvQl81WDII8ZN__V3GnwyIZty6BbQ9GQ&s"
+      },
+      {
+        "id": 18,
+        "name": "Desi Goat",
+        "description": "Healthy goat suitable for breeding or meat.",
+        "category": "Livestock",
+        "quantityType": "unit",
+        "amount": 9000,
+        "type": "biddable",
+        "imageURL": "https://thumbs.dreamstime.com/b/indian-goats-eating-grass-agricultural-field-222551418.jpg"
+    },
+    {
+        "id": 19,
+        "name": "Green Fodder",
+        "description": "Bundled green fodder suitable for dairy animals.",
+        "category": "Dairy Products",
+        "quantityType": "bale",
+        "amount": 500,
+        "type": "biddable",
+        "imageURL": "https://m.media-amazon.com/images/I/81XxhvjP2LL.jpg"
+    },
+    {
+        "id": 20,
+        "name": "Fruit Crate - Mango",
+        "description": "Seasonal Alphonso mangoes in 10kg crates.",
+        "category": "Fruits",
+        "quantityType": "box",
+        "amount": 1200,
+        "type": "purchasable",
+        "imageURL": "https://thumbs.dreamstime.com/b/indian-alphonso-mango-fruits-box-closeup-mango-packing-box-mango-peti-natural-straw-hay-box-isolated-indian-alphonso-331159686.jpg"
+    },
+    {
+        "id": 21,
+        "name": "Chaff Cutter",
+        "description": "Machine to chop dry fodder into small pieces.",
+        "category": "Machinery",
+        "quantityType": "hours",
+        "amount": 200,
+        "type": "rentable",
+        "imageURL": "https://www.kisankraft.com/wp-content/uploads/2020/11/Chaff-Cutter.jpg"
+    },
+    {
+        "id": 22,
+        "name": "Harvesting Team",
+        "description": "Experienced team for manual crop harvesting.",
+        "category": "Contract",
+        "quantityType": "day",
+        "amount": 5000,
+        "type": "contract",
+        "imageURL": "https://as1.ftcdn.net/jpg/03/84/68/86/1000_F_384688646_6F6XiF4P8xAgfz5kPPVlKJ2GcSkQTGKP.jpg"
+    },
+    {
+        "id": 23,
+        "name": "Seed Pack - Brinjal",
+        "description": "Hybrid brinjal seeds for high yield.",
+        "category": "Vegetables",
+        "quantityType": "pack",
+        "amount": 250,
+        "type": "purchasable",
+        "imageURL": "https://m.media-amazon.com/images/I/71uxSGRqzWL.AC_UF1000,1000_QL80.jpg"
+    },
+    {
+        "id": 24,
+        "name": "Chicken",
+        "description": "Free-range chicken suitable for eggs or meat.",
+        "category": "Livestock",
+        "quantityType": "unit",
+        "amount": 400,
+        "type": "biddable",
+        "imageURL": "https://media.istockphoto.com/id/1217649450/photo/chicken-or-hen-on-a-green-meadow.jpg?s=612x612&w=0&k=20&c=zRlZTkwoc-aWb3kI10OqlRLbiQw3R3_KUIchNVFgYgw="
+    },
+    {
+        "id": 25,
+        "name": "Cow Dung Manure",
+        "description": "Composted cow dung manure for soil enrichment.",
+        "category": "Fertilizer",
+        "quantityType": "kg",
+        "amount": 5,
+        "type": "purchasable",
+        "imageURL": "https://lh3.googleusercontent.com/proxy/siBeMx5zq-VTEu10iGfhH0CrppHcksIJBuiz85fVD8soHnN37BmXHTDZauo-NxPwXxtVPQs_dZFeVPHmow040zuxQiVm4wCIN__qQquJ6RcuGagKsMxJefbSGIizlf694Fk"
+    },
+    {
+        "id": 26,
+        "name": "Sprinkler Set",
+        "description": "Irrigation sprinkler set with pipes and connectors.",
+        "category": "Irrigation",
+        "quantityType": "unit",
+        "amount": 3500,
+        "type": "purchasable",
+        "imageURL": "https://bhagwatiplasticpipe.com/wp-content/uploads/2024/11/SPRINKLER-IRRIGATION-SYSTEM-1024x767.jpg"
+    },
+    {
+        "id": 27,
+        "name": "Solar Fence System",
+        "description": "Solar-powered fencing to protect crops.",
+        "category": "Machinery",
+        "quantityType": "unit",
+        "amount": 15000,
+        "type": "biddable",
+        "imageURL": "https://stmaaprodfwsite.blob.core.windows.net/assets/sites/1/2020/05/web_Gallagher31_F_C_Gallagher.jpg"
+    },
+    {
+        "id": 28,
+        "name": "Vermicompost",
+        "description": "Organic compost rich in nutrients from earthworms.",
+        "category": "Fertilizer",
+        "quantityType": "kg",
+        "amount": 12,
+        "type": "purchasable",
+        "imageURL": "https://pushtiorganics.com/cdn/shop/files/Vermicompost.jpg?v=1709291231"
+    },
+    {
+        "id": 29,
+        "name": "Irrigation Pipe",
+        "description": "Flexible PVC pipe for farm irrigation.",
+        "category": "Irrigation",
+        "quantityType": "metre",
+        "amount": 20,
+        "type": "purchasable",
+        "imageURL": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlH9kShzHteufJsT1yXNoLxDStmjHbRnFm_BNwSIK0PIL4TUtNJmWGL77OMJBpSBwQFws&usqp=CAU"
+    },
+    {
+        "id": 30,
+        "name": "Sprayer Service",
+        "description": "Tractor-mounted pesticide sprayer service.",
+        "category": "Contract",
+        "quantityType": "acre",
+        "amount": 700,
+        "type": "contract",
+        "imageURL": "https://whiteox.in/images/rsz_abt.jpg"
+    }
+      
+    ]
+  }
+  

@@ -6,10 +6,13 @@ export default async function NewUserPage() {
 	const user = await getCurrentUser();
 
 	if (!user) {
-		redirect("/register");
+		redirect("/login");
 	}
 
 	if (user.onboardingCompleted) {
+		if (user.role === "buyer") {
+			redirect("/home");
+		}
 		redirect("/");
 	}
 
