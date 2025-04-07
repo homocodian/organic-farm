@@ -9,7 +9,7 @@ export default function LoginPage() {
 	const [errors, formAction, pending] = useActionState(login, null);
 
 	return (
-		<Shell>
+		<Shell className="min-h-svh">
 			<LoginForm
 				subHeader={
 					<div className="text-center text-sm">

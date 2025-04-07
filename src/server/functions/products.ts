@@ -39,3 +39,34 @@ export async function createProduct(body: ProductInsertSchema) {
 		};
 	}
 }
+
+export async function updateProduct(body: Partial<ProductInsertSchema>) {
+	try {
+		const user = await getCurrentUser();
+
+		if (!user) {
+			return { error: "User not found", data: null };
+		}
+
+		const data = await db
+			.update(product)
+			.set({
+				...body,
+			})
+			.returning();
+
+		if (!data) {
+			return { error: "Failed to create product" };
+		}
+
+		revalidateTag("products");
+
+		return { data };
+	} catch (error) {
+		console.log("Error", error);
+
+		return {
+			error: "Failed to create product",
+		};
+	}
+}

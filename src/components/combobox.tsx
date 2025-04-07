@@ -55,7 +55,7 @@ export function Combobox({
 					{value ? (
 						data.find((item) => item.toLowerCase() === value.toLowerCase())
 					) : (
-						<span className="text-muted-foreground">
+						<span className="text-muted-foreground font-normal">
 							{selectPlaceholderText}
 						</span>
 					)}

@@ -1,6 +1,7 @@
 "use client";
 
 import {
+	Product,
 	productCategories,
 	productInsertSchema,
 	ProductInsertSchema,
@@ -10,27 +11,26 @@ import {
 import { useProductForm } from "./form";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { createProduct } from "@/server/functions/products";
+import { createProduct, updateProduct } from "@/server/functions/products";
 
-export function ProductForm() {
+type ProductFormProps = {
+	product?: Product;
+};
+
+export function ProductForm({ product }: ProductFormProps) {
 	const router = useRouter();
 
 	const form = useProductForm({
-		defaultValues: {
-			name: "",
-			description: "",
-			amount: "" as unknown as number,
-			category: "" as unknown as ProductInsertSchema["category"],
-			quantityType: "" as unknown as ProductInsertSchema["quantityType"],
-			type: "" as unknown as ProductInsertSchema["type"],
-		} satisfies ProductInsertSchema,
+		defaultValues: getDefaultValues(product),
 		validators: {
 			onSubmit: productInsertSchema,
 		},
 		onSubmit: async (values) => {
-			const res = await createProduct(values.value);
+			const res = product?.id
+				? await updateProduct(values.value)
+				: await createProduct(values.value);
 			if (res?.data) {
-				router.push("/products");
+				router.push("/dashboard");
 			} else {
 				if (Array.isArray(res?.error)) {
 					res.error.forEach((error) => toast.error(error));
@@ -154,4 +154,18 @@ export function ProductForm() {
 			</form.AppForm>
 		</form>
 	);
+}
+
+function getDefaultValues(product?: Partial<Product>): ProductInsertSchema {
+	return {
+		name: product?.name ?? "",
+		description: product?.description ?? "",
+		amount: product?.amount ?? ("" as unknown as number),
+		category:
+			product?.category ?? ("" as unknown as ProductInsertSchema["category"]),
+		quantityType:
+			product?.quantityType ??
+			("" as unknown as ProductInsertSchema["quantityType"]),
+		type: product?.type ?? ("" as unknown as ProductInsertSchema["type"]),
+	};
 }

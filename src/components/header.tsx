@@ -1,4 +1,4 @@
-import { Leaf, ShoppingCart } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import {
 	NavigationMenu,
@@ -13,6 +13,7 @@ import { Suspense } from "react";
 import { ModeToggle } from "./mode-toggle";
 import { CartCount } from "./landing/cart-count";
 import { UserAccount } from "./user-account";
+import { AppConfig } from "@/lib/app-config";
 
 export type HeaderProps = {
 	showCart?: boolean;
@@ -20,13 +21,13 @@ export type HeaderProps = {
 
 export function Header({ showCart = true }: HeaderProps) {
 	return (
-		<header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+		<header className="sticky px-4 top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
 			<div className="container mx-auto flex h-16 items-center justify-between">
 				<div className="flex items-center gap-6 md:gap-10">
 					<Link href="/" className="flex items-center space-x-2">
-						<Leaf className="h-6 w-6 text-green-600" />
+						<AppConfig.logo />
 						<span className="hidden font-bold sm:inline-block">
-							OrganicHarvest
+							{AppConfig.name}
 						</span>
 					</Link>
 					<NavigationMenu>

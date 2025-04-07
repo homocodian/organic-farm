@@ -12,6 +12,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { UserIcon } from "lucide-react";
 import { authClient } from "@/lib/client-auth";
 import { Button } from "./ui/button";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const navItems = [
 	{
@@ -26,6 +28,8 @@ const navItems = [
 
 export function UserAccount() {
 	const session = authClient.useSession();
+	const [loading, setLoading] = useState(false);
+	const router = useRouter();
 
 	if (session.isPending) {
 		return (
@@ -95,10 +99,14 @@ export function UserAccount() {
 				<DropdownMenuSeparator />
 				<DropdownMenuItem
 					className="cursor-pointer"
-					onSelect={(event) => {
+					onSelect={async (event) => {
 						event.preventDefault();
-						authClient.signOut();
+						setLoading(true);
+						await authClient.signOut();
+						router.push("/login");
+						setLoading(false);
 					}}
+					disabled={loading}
 				>
 					Sign out
 				</DropdownMenuItem>

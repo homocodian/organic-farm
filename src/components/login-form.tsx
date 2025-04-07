@@ -1,4 +1,4 @@
-import { GalleryVerticalEnd, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -36,7 +36,7 @@ export function LoginForm({
 				<div className="flex flex-col items-center gap-2">
 					<a href="#" className="flex flex-col items-center gap-2 font-medium">
 						<div className="flex size-8 items-center justify-center rounded-md">
-							<GalleryVerticalEnd className="size-6" />
+							<AppConfig.logo className="size-8" />
 						</div>
 						<span className="sr-only">{AppConfig.name}</span>
 					</a>

@@ -1,3 +1,5 @@
+import { Logo } from "@/components/logo";
+
 export const AppConfig = {
 	name: "Organic Farm",
 	description:
@@ -6,4 +8,5 @@ export const AppConfig = {
 	onboardingRoute: "/user/onboarding",
 	callbackURL: "/",
 	placeholderImages: ["/placeholder.jpeg", "/placeholder.png"],
+	logo: Logo,
 };
