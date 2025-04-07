@@ -3,40 +3,34 @@ import { Button } from "@/components/ui/button";
 import { ArrowUpRight, ArrowDownRight } from "lucide-react";
 import Link from "next/link";
 
-const transactions = [
+type Transaction = {
+	id: number;
+	name: string;
+	amount: number;
+	date: string;
+	type: "income" | "expense";
+};
+
+export const transactions: Transaction[] = [
 	{
 		id: 1,
-		name: "Amazon.com",
-		amount: -129.99,
-		date: "2023-07-15",
-		type: "expense",
-	},
-	{
-		id: 2,
-		name: "Whole Foods Market",
-		amount: -89.72,
-		date: "2023-07-10",
-		type: "expense",
-	},
-	{
-		id: 3,
-		name: "Netflix Subscription",
-		amount: -15.99,
-		date: "2023-07-05",
-		type: "expense",
-	},
-	{
-		id: 4,
-		name: "Freelance Payment",
-		amount: 750,
-		date: "2023-07-12",
+		name: "Wheat",
+		amount: 1200,
+		date: "2025-4-7",
 		type: "income",
 	},
 	{
-		id: 5,
-		name: "Gas Station",
-		amount: -45.5,
-		date: "2023-07-18",
+		id: 2,
+		name: "Pulses",
+		amount: 5200,
+		date: "2025-4-8",
+		type: "income",
+	},
+	{
+		id: 3,
+		name: "Harvester",
+		amount: 1200,
+		date: "2025-4-7",
 		type: "expense",
 	},
 ];

@@ -13,9 +13,13 @@ import {
 
 type ProductListingPageProps = {
 	products: Product[];
+	isOwnerListing?: boolean;
 };
 
-export function ProductListing({ products }: ProductListingPageProps) {
+export function ProductListing({
+	products,
+	isOwnerListing = false,
+}: ProductListingPageProps) {
 	const [filteredProducts, setFilteredProducts] = useState<Product[]>(products);
 	const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 	const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
@@ -116,7 +120,11 @@ export function ProductListing({ products }: ProductListingPageProps) {
 						) : (
 							<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6">
 								{filteredProducts.map((product) => (
-									<ProductCard key={product.id} product={product} />
+									<ProductCard
+										key={product.id}
+										product={product}
+										isOwner={isOwnerListing}
+									/>
 								))}
 							</div>
 						)}

@@ -30,7 +30,7 @@ export function ProductForm({ product }: ProductFormProps) {
 				? await updateProduct(values.value)
 				: await createProduct(values.value);
 			if (res?.data) {
-				router.push("/dashboard");
+				router.push(product?.id ? "/products/listings" : "/dashboard");
 			} else {
 				if (Array.isArray(res?.error)) {
 					res.error.forEach((error) => toast.error(error));
@@ -68,6 +68,18 @@ export function ProductForm({ product }: ProductFormProps) {
 						label="Description"
 						required
 						id="description"
+					/>
+				)}
+			</form.AppField>
+
+			<form.AppField name="imageUrl">
+				{(field) => (
+					<field.TextField
+						placeholder="Image URL"
+						label="Image URL"
+						id="imageUrl"
+						required
+						type="url"
 					/>
 				)}
 			</form.AppField>

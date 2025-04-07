@@ -14,9 +14,9 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import { ChevronRight } from "lucide-react";
 
-export function AboutSection() {
+export function LearnMode() {
 	return (
-		<section className="w-full py-12 md:py-24 lg:py-32 bg-primary/5">
+		<section className="w-full py-12 md:py-24 lg:py-32 bg-primary/5" id="learn">
 			<div className="container mx-auto px-4 md:px-6">
 				<motion.div
 					className="flex flex-col items-center justify-center space-y-4 text-center mb-12"
@@ -46,6 +46,7 @@ export function AboutSection() {
 								"Learn how crop rotation improves soil health and reduces pest problems naturally.",
 							date: "May 15, 2023",
 							category: "Farming Practices",
+							imageUrl: "/images/crop-rotation.webp",
 						},
 						{
 							title: "Seasonal Eating Guide",
@@ -53,6 +54,7 @@ export function AboutSection() {
 								"Discover the benefits of eating produce that's in season and how it can improve your health.",
 							date: "June 3, 2023",
 							category: "Nutrition",
+							imageUrl: "/images/seasonal-guide.png",
 						},
 						{
 							title: "Composting 101",
@@ -60,6 +62,7 @@ export function AboutSection() {
 								"A beginner's guide to starting your own compost pile and reducing food waste.",
 							date: "July 22, 2023",
 							category: "Sustainability",
+							imageUrl: "/images/compost.jpg",
 						},
 					].map((article, index) => (
 						<motion.div
@@ -69,13 +72,13 @@ export function AboutSection() {
 							transition={{ duration: 0.5, delay: index * 0.1 }}
 							viewport={{ once: true }}
 						>
-							<Card className="h-full overflow-hidden transition-all hover:shadow-lg">
+							<Card className="h-full overflow-hidden transition-all hover:shadow-lg py-0">
 								<CardHeader className="p-0">
 									<div className="h-48 w-full overflow-hidden">
 										<Image
-											src={`/placeholder.jpeg?height=200&width=400&text=Article+${
-												index + 1
-											}`}
+											src={`${
+												article.imageUrl
+											}?height=200&width=400&text=Article+${index + 1}`}
 											alt={article.title}
 											width={400}
 											height={200}

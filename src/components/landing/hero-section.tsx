@@ -5,8 +5,9 @@ import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
-export function HeroSection() {
+export function Hero() {
 	return (
 		<section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-gradient-to-b from-primary/10 dark:from-0% to-white dark:to-background">
 			<div className="container mx-auto px-4 md:px-6">
@@ -50,12 +51,14 @@ export function HeroSection() {
 							animate={{ opacity: 1, y: 0 }}
 							transition={{ duration: 0.5, delay: 0.3 }}
 						>
-							<Button size="lg">
-								Shop Now
-								<ChevronRight className="ml-2 h-4 w-4" />
+							<Button size="lg" asChild>
+								<Link href="/products">
+									Shop Now
+									<ChevronRight className="ml-2 h-4 w-4" />
+								</Link>
 							</Button>
-							<Button variant="outline" size="lg">
-								Learn More
+							<Button variant="outline" size="lg" asChild>
+								<Link href="#learn">Learn More</Link>
 							</Button>
 						</motion.div>
 					</div>
@@ -66,7 +69,7 @@ export function HeroSection() {
 						className="relative h-[300px] sm:h-[400px] lg:h-[500px] rounded-xl overflow-hidden"
 					>
 						<Image
-							src="/placeholder.png?height=500&width=500"
+							src="/placeholder.jpeg?height=500&width=500"
 							alt="Organic vegetables"
 							fill
 							className="object-cover"

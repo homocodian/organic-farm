@@ -7,6 +7,7 @@ import { revalidateTag } from "next/cache";
 import { product, ProductInsertSchema } from "../db/schema/product";
 import { getCurrentUser } from "@/lib/session";
 import { db } from "../db";
+import { eq } from "drizzle-orm";
 
 export async function createProduct(body: ProductInsertSchema) {
 	try {
@@ -53,6 +54,7 @@ export async function updateProduct(body: Partial<ProductInsertSchema>) {
 			.set({
 				...body,
 			})
+			.where(eq(product.id, user.id))
 			.returning();
 
 		if (!data) {

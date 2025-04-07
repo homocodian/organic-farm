@@ -16,6 +16,7 @@ export async function addToCart(productId: string) {
 	if (!user) {
 		return {
 			error: "User not authenticated",
+			statusCode: 401,
 		};
 	}
 
@@ -47,6 +48,7 @@ export async function addToCart(productId: string) {
 		if (!cartItem) {
 			return {
 				error: "Failed to add item to cart",
+				statusCode: 500,
 			};
 		}
 
@@ -62,11 +64,13 @@ export async function addToCart(productId: string) {
 		) {
 			return {
 				error: "Item already in cart",
+				statusCode: 409,
 			};
 		}
 
 		return {
 			error: "Failed to add item to cart",
+			statusCode: 500,
 		};
 	}
 }

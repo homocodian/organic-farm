@@ -1,3 +1,4 @@
+import { AppConfig } from "@/lib/app-config";
 import { Leaf } from "lucide-react";
 import Link from "next/link";
 
@@ -8,14 +9,11 @@ export function Footer() {
 				<div className="flex flex-col space-y-4">
 					<Link href="/" className="flex items-center space-x-2">
 						<Leaf className="h-6 w-6 text-primary" />
-						<span className="font-bold text-primary">OrganicHarvest</span>
+						<span className="font-bold text-primary">{AppConfig.name}</span>
 					</Link>
 					<p className="max-w-[250px] text-sm text-gray-600 dark:text-muted-foreground">
 						Bringing the freshest organic produce from our farms to your table.
 					</p>
-					<div className="flex space-x-4">
-						{/* Social media icons would go here */}
-					</div>
 				</div>
 				<div className="grid grid-cols-2 gap-10 sm:grid-cols-4">
 					<div className="space-y-3">
@@ -170,7 +168,7 @@ export function Footer() {
 			</div>
 			<div className="container mx-auto mt-8 border-t pt-6">
 				<p className="text-center text-xs text-accent-foreground">
-					© {new Date().getFullYear()} OrganicHarvest. All rights reserved.
+					© {new Date().getFullYear()} {AppConfig.name}. All rights reserved.
 				</p>
 			</div>
 		</footer>

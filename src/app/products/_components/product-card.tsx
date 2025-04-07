@@ -3,17 +3,19 @@ import Image from "next/image";
 import { Product } from "@/server/db/schema/product";
 import { AddToCart } from "./add-to-cart";
 import { AppConfig } from "@/lib/app-config";
+import { EditButton } from "../listings/_compenents/edit-button";
 
 interface ProductCardProps {
 	product: Product;
+	isOwner?: boolean;
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, isOwner = false }: ProductCardProps) {
 	return (
 		<div className="bg-card rounded-lg overflow-hidden border hover:shadow-md transition-shadow">
 			<div className="relative h-48 bg-gray-100">
 				<Image
-					src={AppConfig.placeholderImages[1]}
+					src={product.imageUrl ?? AppConfig.placeholderImages[1]}
 					alt={product.name}
 					fill
 					className="object-cover"
@@ -49,7 +51,11 @@ export function ProductCard({ product }: ProductCardProps) {
 					<span className="font-semibold">
 						₹{`${product.amount.toFixed(2)}/${product.quantityType}`}
 					</span>
-					<AddToCart productId={product.id} />
+					{isOwner ? (
+						<EditButton productId={product.id} />
+					) : (
+						<AddToCart productId={product.id} />
+					)}
 				</div>
 			</div>
 		</div>

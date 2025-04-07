@@ -27,7 +27,7 @@ import { AppConfig } from "@/lib/app-config";
 
 const navigation = [
 	{ name: "Dashboard", href: "/", icon: Home },
-	{ name: "Products", href: "/listings", icon: Vegan },
+	{ name: "Products", href: "/products/listings", icon: Vegan },
 	{ name: "Transactions", href: "/transactions", icon: Wallet },
 	{ name: "Invoices", href: "/invoices", icon: Receipt },
 	{ name: "Payments", href: "/payments", icon: CreditCard },

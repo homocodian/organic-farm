@@ -58,6 +58,7 @@ export const product = pgTable(
 		quantityType: quantityType("quantity_type").notNull(),
 		amount: real("amount").notNull(),
 		type: productType("type").notNull(),
+		imageUrl: text("image_url"),
 
 		userId: text("user_id")
 			.notNull()

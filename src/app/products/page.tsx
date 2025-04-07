@@ -6,7 +6,11 @@ import { Header } from "@/components/header";
 const getProducts = unstable_cache(
 	async () => {
 		try {
-			return await db.query.product.findMany();
+			return await db.query.product.findMany({
+				orderBy(fields, operators) {
+					return operators.desc(fields.createdAt);
+				},
+			});
 		} catch {
 			return [];
 		}

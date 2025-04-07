@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Wallet, CreditCard, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { transactions } from "./recent-transactions";
 
 export type Account = {
 	clear: number;
@@ -12,7 +13,7 @@ export type Account = {
 };
 
 const initialAccounts: Account = {
-	clear: 0,
+	clear: transactions.reduce((accu, current) => accu + current.amount, 0),
 	pending: 0,
 };
 

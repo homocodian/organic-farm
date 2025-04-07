@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 // import { Button } from "@/components/ui/button";
-import { TrendingUp, Users, DollarSign } from "lucide-react";
+import { TrendingUp, Users, IndianRupee } from "lucide-react";
 
 const statusColors = {
 	"On Track":
@@ -31,7 +31,7 @@ const metrics: Metric[] = [
 		progress: 75,
 		target: 100000,
 		current: 75000,
-		unit: "$",
+		unit: "₹",
 	},
 	{
 		id: 2,
@@ -48,12 +48,12 @@ const metrics: Metric[] = [
 		id: 3,
 		title: "Average Order Value",
 		subtitle: "Target AOV for Q3",
-		icon: DollarSign,
+		icon: IndianRupee,
 		status: "Ahead",
 		progress: 110,
 		target: 150,
 		current: 165,
-		unit: "$",
+		unit: "₹",
 	},
 ];
 
