@@ -5,12 +5,17 @@ import { CartProps } from "./cart";
 import { useMemo, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { clearCart as resetCart } from "@/server/functions/cart";
 
 interface OrderSummaryProps extends CartProps {
 	clearCart: () => void;
 }
 
-export function OrderSummary({ cartItems, clearCart }: OrderSummaryProps) {
+export function OrderSummary({
+	cartItems,
+	clearCart,
+	cartId,
+}: OrderSummaryProps) {
 	const subTotal = useMemo(() => {
 		return cartItems.reduce(
 			(acc, item) => acc + item.product.amount * item.quantity,
@@ -46,13 +51,15 @@ export function OrderSummary({ cartItems, clearCart }: OrderSummaryProps) {
 			<CardFooter className="p-6 pt-0">
 				<Button
 					className="w-full"
-					onClick={() => {
+					onClick={async () => {
 						setLoading(true);
-						setTimeout(() => {
+						const data = await resetCart(cartId);
+						if (data.error) {
+							toast.error("Failed to clear cart");
 							setLoading(false);
-							toast.success("Order placed successfully!");
-							clearCart();
-						}, 2000);
+						}
+						clearCart();
+						setLoading(false);
 					}}
 					disabled={loading}
 				>

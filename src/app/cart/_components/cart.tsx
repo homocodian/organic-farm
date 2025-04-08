@@ -8,6 +8,11 @@ import Link from "next/link";
 import { Product } from "@/server/db/schema/product";
 import { useCallback, useState } from "react";
 import { EmptyCart } from "./empty";
+import {
+	removeItemFromCart,
+	updateItemQuantity,
+} from "@/server/functions/cart";
+import { useRouter } from "next/navigation";
 
 export type CartProps = {
 	cartItems: {
@@ -15,23 +20,30 @@ export type CartProps = {
 		quantity: number;
 		product: Product;
 	}[];
+	cartId: string;
 };
 
-export function Cart({ cartItems }: CartProps) {
+export function Cart({ cartItems, cartId }: CartProps) {
 	const [items, setItems] = useState(() => cartItems);
+	const [isLoading, setIsLoading] = useState(false);
+	const router = useRouter();
 
 	const clearCart = useCallback(() => {
 		setItems([]);
 	}, []);
 
-	const handleRemoveItem = useCallback((productId: string) => {
-		setItems((prevItems) =>
-			prevItems.filter((item) => item.productId !== productId)
-		);
-	}, []);
+	const handleRemoveItem = useCallback(
+		async (productId: string) => {
+			setItems((prevItems) =>
+				prevItems.filter((item) => item.productId !== productId)
+			);
+			await removeItemFromCart(cartId, productId);
+		},
+		[cartId]
+	);
 
 	const handleUpdateItem = useCallback(
-		(productId: string, quantity: number) => {
+		async (productId: string, quantity: number) => {
 			if (quantity < 1) {
 				handleRemoveItem(productId);
 				return;
@@ -47,8 +59,10 @@ export function Cart({ cartItems }: CartProps) {
 						: item
 				)
 			);
+
+			await updateItemQuantity(cartId, productId, quantity);
 		},
-		[handleRemoveItem]
+		[handleRemoveItem, cartId]
 	);
 
 	if (items.length === 0) {
@@ -76,14 +90,23 @@ export function Cart({ cartItems }: CartProps) {
 						<Button variant="outline" asChild>
 							<Link href="/products">Continue Shopping</Link>
 						</Button>
-						<Button variant="outline">Update Cart</Button>
+						<Button
+							variant="outline"
+							onClick={() => {
+								setIsLoading(true);
+								router.refresh();
+							}}
+							disabled={isLoading}
+						>
+							Update Cart
+						</Button>
 					</CardFooter>
 				</Card>
 			</div>
 
 			{/* Order Summary */}
 			<div>
-				<OrderSummary cartItems={items} clearCart={clearCart} />
+				<OrderSummary cartId={cartId} cartItems={items} clearCart={clearCart} />
 			</div>
 		</div>
 	);

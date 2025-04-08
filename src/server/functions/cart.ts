@@ -8,7 +8,7 @@ import {
 	cart as cartTable,
 } from "../db/schema/cart";
 
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 export async function addToCart(productId: string) {
 	const user = await getCurrentUser();
@@ -77,4 +77,146 @@ export async function addToCart(productId: string) {
 
 function createCart(userId: string) {
 	return db.insert(cartTable).values({ userId }).returning();
+}
+
+export async function removeItemFromCart(cartId: string, productId: string) {
+	const user = await getCurrentUser();
+
+	if (!user) {
+		return {
+			error: "User not authenticated",
+			statusCode: 401,
+		};
+	}
+
+	try {
+		const [cart] = await db
+			.select()
+			.from(cartTable)
+			.where(eq(cartTable.userId, user.id));
+
+		if (cart.id !== cartId) {
+			return {
+				error: "Cart not found",
+				statusCode: 404,
+			};
+		}
+
+		const [cartItem] = await db
+			.delete(cartItemTable)
+			.where(
+				and(
+					eq(cartItemTable.cartId, cartId),
+					eq(cartItemTable.productId, productId)
+				)
+			)
+			.returning();
+
+		if (!cartItem) {
+			return {
+				error: "Failed to remove item from cart",
+				statusCode: 500,
+			};
+		}
+
+		return cartItem;
+	} catch (error) {
+		console.error("🚀 ~ removeItemFromCart ~ error:", error);
+		return {
+			error: "Failed to remove item from cart",
+			statusCode: 500,
+		};
+	}
+}
+
+export async function clearCart(cartId: string) {
+	const user = await getCurrentUser();
+
+	if (!user) {
+		return {
+			error: "User not authenticated",
+			statusCode: 401,
+		};
+	}
+
+	try {
+		const [cart] = await db
+			.select()
+			.from(cartTable)
+			.where(eq(cartTable.userId, user.id));
+
+		if (cart.id !== cartId) {
+			return {
+				error: "Cart not found",
+				statusCode: 404,
+			};
+		}
+
+		await db.delete(cartItemTable).where(eq(cartItemTable.cartId, cartId));
+		return {
+			error: null,
+			statusCode: 200,
+		};
+	} catch (error) {
+		console.error("🚀 ~ clearCart ~ error:", error);
+		return {
+			error: "Failed to clear cart",
+			statusCode: 500,
+		};
+	}
+}
+
+export async function updateItemQuantity(
+	cartId: string,
+	productId: string,
+	quantity: number
+) {
+	const user = await getCurrentUser();
+
+	if (!user) {
+		return {
+			error: "User not authenticated",
+			statusCode: 401,
+		};
+	}
+
+	try {
+		const [cart] = await db
+			.select()
+			.from(cartTable)
+			.where(eq(cartTable.userId, user.id));
+
+		if (cart.id !== cartId) {
+			return {
+				error: "Cart not found",
+				statusCode: 404,
+			};
+		}
+
+		const [cartItem] = await db
+			.update(cartItemTable)
+			.set({ quantity })
+			.where(
+				and(
+					eq(cartItemTable.cartId, cartId),
+					eq(cartItemTable.productId, productId)
+				)
+			)
+			.returning();
+
+		if (!cartItem) {
+			return {
+				error: "Failed to update item quantity",
+				statusCode: 500,
+			};
+		}
+
+		return cartItem;
+	} catch (error) {
+		console.error("🚀 ~ incrementItemQuantity ~ error:", error);
+		return {
+			error: "Failed to update item quantity",
+			statusCode: 500,
+		};
+	}
 }

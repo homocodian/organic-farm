@@ -37,7 +37,7 @@ export default async function CartPage() {
 							<ShoppingCart className="h-6 w-6" />
 							<h1 className="text-3xl font-bold tracking-tight">Your Cart</h1>
 						</div>
-						<Cart cartItems={cart.cartItems} />
+						<Cart cartId={cart.id} cartItems={cart.cartItems} />
 					</>
 				) : (
 					<EmptyCart />

@@ -23,7 +23,7 @@ export function CartItem({
 			<div className="grid gap-4 sm:grid-cols-[80px_1fr] sm:gap-6">
 				<div className="relative aspect-square h-20 w-20 min-w-fit overflow-hidden rounded-md bg-muted">
 					<Image
-						src="/placeholder.jpeg?height=80&width=80"
+						src={product.imageUrl ?? "/placeholder.jpeg?height=80&width=80"}
 						alt="Product 1"
 						fill
 						className="object-cover"

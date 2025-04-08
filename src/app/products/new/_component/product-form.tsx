@@ -179,5 +179,6 @@ function getDefaultValues(product?: Partial<Product>): ProductInsertSchema {
 			product?.quantityType ??
 			("" as unknown as ProductInsertSchema["quantityType"]),
 		type: product?.type ?? ("" as unknown as ProductInsertSchema["type"]),
+		imageUrl: product?.imageUrl ?? "",
 	};
 }
