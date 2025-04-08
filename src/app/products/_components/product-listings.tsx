@@ -43,7 +43,7 @@ export function ProductListing({
 
 		if (selectedQuantityTypes.length > 0) {
 			result = result.filter((product) =>
-				selectedQuantityTypes.includes(product.quantityType)
+				selectedQuantityTypes.includes(product.quantityType as string)
 			);
 		}
 

@@ -26,6 +26,16 @@ export const productCategory = pgEnum("product_category", [
 	"Medicinal & aromatic plants",
 	"Leaves",
 	"Milk products",
+	"Dairy Products",
+	"Meat products",
+	"Fish products",
+	"Egg products",
+	"Animal feed",
+	"Animal products",
+	"Contract",
+	"Livestock",
+	"Fertilizer",
+	"Irrigation",
 	"Others",
 ]);
 
@@ -43,7 +53,21 @@ export const productTypes = productType.enumValues;
 export const quantityType = pgEnum("product_quantity_type", [
 	"Kg",
 	"Quintal",
-	"Hours",
+	"Hour",
+	"Litre",
+	"Piece",
+	"Packet",
+	"Bundle",
+	"Box",
+	"Carton",
+	"Sets",
+	"Pair",
+	"Dozen",
+	"acre",
+	"Metre",
+	"Pack",
+	"Day",
+	"Unit",
 ]);
 
 export const quantityTypes = quantityType.enumValues;
