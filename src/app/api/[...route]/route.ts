@@ -1,5 +1,6 @@
 import { AppConfig } from "@/lib/app-config";
 import { auth } from "@/lib/auth";
+import { chat } from "@/server/route/chat";
 import { product } from "@/server/route/product";
 import { user } from "@/server/route/user";
 import { Hono } from "hono";
@@ -15,7 +16,8 @@ const app = new Hono()
 		});
 	})
 	.route("/user", user)
-	.route("/products", product);
+	.route("/products", product)
+	.route("/chat", chat);
 
 app.on(["POST", "GET"], "/auth/*", (c) => {
 	return auth.handler(c.req.raw);

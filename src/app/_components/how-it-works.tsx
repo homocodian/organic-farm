@@ -46,7 +46,7 @@ export default function HowItWorks() {
 						</div>
 						<div className="flex items-center justify-center">
 							<Image
-								src="/placeholder.svg?height=400&width=500"
+								src="/images/sell.jpg?height=400&width=500"
 								width={500}
 								height={400}
 								alt="Farmer selling produce"
@@ -59,7 +59,7 @@ export default function HowItWorks() {
 					<div className="mt-20 grid gap-6 items-center lg:grid-cols-2 lg:gap-12 xl:grid-cols-2">
 						<div className="flex items-center justify-center order-last lg:order-first">
 							<Image
-								src="/placeholder.svg?height=400&width=500"
+								src="/images/rent.jpg?height=400&width=500"
 								width={500}
 								height={400}
 								alt="Farm equipment rental"
