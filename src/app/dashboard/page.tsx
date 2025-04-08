@@ -4,13 +4,17 @@ import { BusinessMetrics } from "./_components/business-matrics";
 import { RecentTransactions } from "./_components/recent-transactions";
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/session";
-import { notFound } from "next/navigation";
+import { redirect, unauthorized } from "next/navigation";
 
 export default async function Dashboard() {
 	const user = await getCurrentUser();
 
-	if (!user || user.role === "buyer") {
-		notFound();
+	if (!user) {
+		redirect("/login");
+	}
+
+	if (user.role === "buyer") {
+		unauthorized();
 	}
 
 	return (

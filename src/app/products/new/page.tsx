@@ -3,7 +3,7 @@ import { ProductForm } from "./_component/product-form";
 import { Header } from "@/components/header";
 import { AppConfig } from "@/lib/app-config";
 import { getCurrentUser } from "@/lib/session";
-import { notFound, redirect } from "next/navigation";
+import { redirect, unauthorized } from "next/navigation";
 
 export default async function NewProductPage() {
 	const user = await getCurrentUser();
@@ -13,7 +13,7 @@ export default async function NewProductPage() {
 	}
 
 	if (user.role === "buyer") {
-		notFound();
+		unauthorized();
 	}
 
 	return (

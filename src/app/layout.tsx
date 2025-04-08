@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { AppConfig } from "@/lib/app-config";
+
+import "./globals.css";
 
 export const metadata: Metadata = {
 	title: AppConfig.name,

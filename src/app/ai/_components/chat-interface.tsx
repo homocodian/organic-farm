@@ -17,7 +17,8 @@ export function ChatInterface() {
 		{
 			id: crypto.randomUUID(),
 			role: "assistant",
-			content: "Hello! How can I help you today?",
+			content: `Hello! How can I help you today?\n
+			नमस्ते! मैं आपकी आज किस तरह मदद कर सकता हूँ?`,
 			files: [],
 		},
 	]);
