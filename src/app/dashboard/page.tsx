@@ -4,7 +4,7 @@ import { BusinessMetrics } from "./_components/business-matrics";
 import { RecentTransactions } from "./_components/recent-transactions";
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/session";
-import { redirect, unauthorized } from "next/navigation";
+import { redirect } from "next/navigation";
 
 export default async function Dashboard() {
 	const user = await getCurrentUser();
@@ -14,7 +14,7 @@ export default async function Dashboard() {
 	}
 
 	if (user.role === "buyer") {
-		unauthorized();
+		redirect("/home");
 	}
 
 	return (

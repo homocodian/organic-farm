@@ -10,7 +10,7 @@ type CartItemProps = {
 	handleUpdateItem: (productId: string, quantity: number) => void;
 };
 
-const excludeQTypes: Product["quantityType"][] = ["Hours"];
+const excludeQTypes: Product["quantityType"][] = ["Hour"];
 
 export function CartItem({
 	quantity,

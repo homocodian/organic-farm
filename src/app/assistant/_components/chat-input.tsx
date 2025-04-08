@@ -53,7 +53,7 @@ export function ChatInput({ onSendMessageAction, isLoading }: ChatInputProps) {
 	return (
 		<form onSubmit={handleSubmit} className="relative">
 			{files.length > 0 && (
-				<div className="flex flex-wrap gap-2 p-2 border rounded-t-lg bg-background">
+				<div className="flex flex-wrap gap-2 p-2 border rounded-t-lg">
 					{files.map((file, index) => (
 						<div key={index} className="relative group">
 							<FilePreview file={file} small />
@@ -73,7 +73,7 @@ export function ChatInput({ onSendMessageAction, isLoading }: ChatInputProps) {
 
 			<div
 				className={cn(
-					"flex items-end gap-2 border rounded-lg p-2 bg-background",
+					"flex items-end gap-2 border rounded-lg p-2",
 					files.length > 0 && "rounded-t-none border-t-0"
 				)}
 			>
@@ -101,7 +101,7 @@ export function ChatInput({ onSendMessageAction, isLoading }: ChatInputProps) {
 					onChange={(e) => setMessage(e.target.value)}
 					onKeyDown={handleKeyDown}
 					placeholder="Type a message..."
-					className="min-h-10 resize-none border-0 focus-visible:ring-0 flex-1"
+					className="min-h-10 resize-none border-0 focus-visible:ring-0 flex-1 shadow-none bg-transparent focus-visible:ring-transparent focus-visible:outline-none"
 					rows={1}
 				/>
 

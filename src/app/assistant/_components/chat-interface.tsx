@@ -77,6 +77,8 @@ export function ChatInterface() {
 				console.log("Stream finished on the client.");
 				reader.releaseLock();
 
+				setIsLoading(false);
+
 				setMessages((prev) => {
 					const lastMessage = prev.find((m) => m.id === assistantMessageId);
 					if (!lastMessage) return prev;
@@ -88,8 +90,6 @@ export function ChatInterface() {
 					);
 					return updated;
 				});
-
-				setIsLoading(false);
 			} catch (error) {
 				console.error("Error consuming stream:", error);
 			}

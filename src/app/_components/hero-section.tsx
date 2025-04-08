@@ -29,7 +29,7 @@ export default function HeroSection() {
 					</div>
 					<div className="flex items-center justify-center">
 						<Image
-							src="/hero.png?height=500&width=500"
+							src="/images/hero.jpg?height=500&width=500"
 							width={550}
 							height={550}
 							alt="Farmer with produce"
