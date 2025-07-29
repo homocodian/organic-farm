@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { FileIcon, ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 
 interface FilePreviewProps {
   file: File;
@@ -44,7 +43,8 @@ export function FilePreview({ file, small = false }: FilePreviewProps) {
             "relative h-full aspect-square bg-muted flex items-center justify-center overflow-hidden",
           )}
         >
-          <Image
+          {/* eslint-disable-next-line */}
+          <img
             src={preview || "/placeholder.svg"}
             alt={file.name}
             className="h-full w-full object-cover"

@@ -3,12 +3,12 @@ import { streamText } from "ai";
 import { Hono } from "hono";
 import { stream } from "hono/streaming";
 
-const googleModel = google("gemini-2.5-pro-exp-03-25", {
-	useSearchGrounding: true,
+const googleModel = google("gemini-2.5-flash", {
+  useSearchGrounding: true,
 });
 
-function genaratePrompt(message: string) {
-	return `You are an expert agriculturalist with deep knowledge spanning all aspects of agriculture, agricultural goods, and farming practices. Your expertise includes crop cultivation, livestock management, soil science, pest control, irrigation techniques, agricultural economics, commodity markets, food processing related to farm produce, sustainable agriculture, and the impact of environmental factors on farming.
+function getPrompt(message: string) {
+  return `You are an expert agriculturalist with deep knowledge spanning all aspects of agriculture, agricultural goods, and farming practices. Your expertise includes crop cultivation, livestock management, soil science, pest control, irrigation techniques, agricultural economics, commodity markets, food processing related to farm produce, sustainable agriculture, and the impact of environmental factors on farming.
 
   Your primary function is to answer questions directly related to agriculture, agricultural goods, and farming. You must politely and firmly reject any input that falls outside of these domains.
 
@@ -36,18 +36,47 @@ function genaratePrompt(message: string) {
 }
 
 export const chat = new Hono().post("/", async (c) => {
-	const { prompt } = await c.req.json();
+  const { prompt } = await c.req.json();
 
-	if (!prompt) {
-		return c.json({ error: "No messages provided" }, 400);
-	}
+  if (!prompt) {
+    return c.json({ error: "No messages provided" }, 400);
+  }
 
-	const result = streamText({
-		model: googleModel,
-		prompt: genaratePrompt(prompt),
-	});
+  c.header("Content-Type", "text/plain; charset=utf-8");
 
-	c.header("Content-Type", "text/plain; charset=utf-8");
+  try {
+    const { fullStream } = streamText({
+      model: googleModel,
+      prompt: getPrompt(prompt),
+    });
 
-	return stream(c, (stream) => stream.pipe(result.textStream));
+    return stream(c, async (writer) => {
+      for await (const part of fullStream) {
+        switch (part.type) {
+          case "text-delta": {
+            writer.write(part.textDelta);
+            break;
+          }
+
+          case "error": {
+            console.error("Stream error:", part.error);
+            await writer.write("\n[Streaming error occurred.]\n");
+            break;
+          }
+
+          case "finish": {
+            break;
+          }
+
+          default: {
+            // For unexpected types (tool-call, reasoning, etc.)
+            console.debug(`Unhandled stream event: ${part.type}`);
+          }
+        }
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    return c.text("Failed to generate content!", 500);
+  }
 });
