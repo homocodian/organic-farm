@@ -4,31 +4,32 @@ import { Toaster } from "@/components/ui/sonner";
 import { AppConfig } from "@/lib/app-config";
 
 import "./globals.css";
+import { defaultTheme } from "@/constants/theme";
 
 export const metadata: Metadata = {
-	title: AppConfig.name,
-	description: AppConfig.description,
+  title: AppConfig.name,
+  description: AppConfig.description,
 };
 
 export default function RootLayout({
-	children,
+  children,
 }: Readonly<{
-	children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-	return (
-		<html lang="en" suppressHydrationWarning className="scroll-smooth">
-			<head />
-			<body>
-				<ThemeProvider
-					attribute="class"
-					defaultTheme="light"
-					enableSystem
-					disableTransitionOnChange
-				>
-					{children}
-					<Toaster />
-				</ThemeProvider>
-			</body>
-		</html>
-	);
+  return (
+    <html lang="en" suppressHydrationWarning className="scroll-smooth">
+      <head />
+      <body>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme={defaultTheme}
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+          <Toaster />
+        </ThemeProvider>
+      </body>
+    </html>
+  );
 }
