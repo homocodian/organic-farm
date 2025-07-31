@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
-import { Message } from "./chat-interface";
 import { FilePreview } from "./file-preview";
 import Markdown from "marked-react";
+import { Message } from "../_store/chat";
 
 interface MessageItemProps {
   message: Message;

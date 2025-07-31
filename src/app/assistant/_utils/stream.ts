@@ -1,9 +1,17 @@
-export async function getStream(prompt: string) {
+type Options = {
+  signal: RequestInit["signal"];
+};
+
+export async function getStream(
+  prompt: string,
+  options: Partial<Options> = {},
+) {
   const response = await fetch("/api/chat", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
+    ...options,
     body: JSON.stringify({ prompt }),
   });
 

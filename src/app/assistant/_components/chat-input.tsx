@@ -7,21 +7,28 @@ import type React from "react";
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { PaperclipIcon, SendIcon, XIcon } from "lucide-react";
+import { PaperclipIcon, SendIcon, StopCircleIcon, XIcon } from "lucide-react";
 import { FilePreview } from "./file-preview";
+import { useChat } from "../_store/chat";
 
 interface ChatInputProps {
   onSendMessageAction: (content: string, files?: File[]) => void;
-  isLoading: boolean;
+  stopStreamingAction: () => void;
 }
 
-export function ChatInput({ onSendMessageAction, isLoading }: ChatInputProps) {
+export function ChatInput({
+  onSendMessageAction,
+  stopStreamingAction: stopStreaming,
+}: ChatInputProps) {
   const [message, setMessage] = useState("");
   const [files, setFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const isStreaming = useChat((s) => s.isStreaming);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
     if (message.trim() || files.length > 0) {
       onSendMessageAction(message, files.length > 0 ? files : undefined);
       setMessage("");
@@ -105,15 +112,22 @@ export function ChatInput({ onSendMessageAction, isLoading }: ChatInputProps) {
           rows={1}
         />
 
-        <Button
-          type="submit"
-          size="icon"
-          className="rounded-full"
-          disabled={isLoading || (!message.trim() && files.length === 0)}
-        >
-          <SendIcon className="size-5" />
-          <span className="sr-only">Send message</span>
-        </Button>
+        {isStreaming ? (
+          <Button size="icon" className="rounded-full" onClick={stopStreaming}>
+            <StopCircleIcon className="size-5" />
+            <span className="sr-only">Stop streaming</span>
+          </Button>
+        ) : (
+          <Button
+            type="submit"
+            size="icon"
+            className="rounded-full"
+            disabled={!message.trim() && files.length === 0}
+          >
+            <SendIcon className="size-5" />
+            <span className="sr-only">Send message</span>
+          </Button>
+        )}
       </div>
     </form>
   );

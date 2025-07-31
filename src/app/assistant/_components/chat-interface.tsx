@@ -1,104 +1,86 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useRef } from "react";
 import { ChatMessages } from "./chat-messages";
 import { ChatInput } from "./chat-input";
 import { decodeStreamToText, getStream } from "../_utils/stream";
-
-export interface Message {
-  content: string;
-  role: "user" | "assistant";
-  files?: File[];
-  id: string;
-  status?: "error" | "pending" | "success";
-}
+import { Message, useChat } from "../_store/chat";
 
 export function ChatInterface() {
-  const [messages, setMessages] = useState<Message[]>([
-    {
+  const messages = useChat((s) => s.messages);
+  const addMessage = useChat((s) => s.addMessage);
+  const appendMessageToChat = useChat((s) => s.appendMessageToChat);
+  const setIsLoading = useChat((s) => s.setIsLoading);
+  const setIsStreaming = useChat((s) => s.setIsStreaming);
+
+  const abortController = useRef<AbortController | null>(null);
+
+  const stopStreaming = () => {
+    abortController.current?.abort();
+  };
+
+  const handleSendMessage = async (content: string, files?: File[]) => {
+    if (!content.trim() && (!files || files.length === 0)) return;
+
+    const userMessage: Message = {
       id: crypto.randomUUID(),
-      role: "assistant",
-      content: `Hello! How can I help you today?\n\nनमस्ते! मैं आपकी आज किस तरह मदद कर सकता हूँ?`,
-      files: [],
-    },
-  ]);
+      content,
+      role: "user",
+      files,
+    };
 
-  const [isStreaming, setIsStreaming] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+    addMessage(userMessage);
 
-  const addMessage = useCallback(
-    (message: Omit<Message, "id">) => {
-      const messageWithId = { ...message, id: crypto.randomUUID() as string };
-      setMessages((messages) => [...messages, messageWithId]);
+    setIsStreaming(true);
+    setIsLoading(true);
 
-      return messageWithId;
-    },
-    [setMessages],
-  );
+    try {
+      abortController.current = new AbortController();
 
-  const appendMessageToChat = useCallback(
-    (message: string) => {
-      setMessages((messages) => {
-        const latestMessage = messages[messages.length - 1];
-        return [
-          ...messages.slice(0, -1),
-          { ...latestMessage, content: latestMessage.content + message },
-        ];
+      const stream = await getStream(content, {
+        signal: abortController.current.signal,
       });
-    },
-    [setMessages],
-  );
 
-  const handleSendMessage = useCallback(
-    async (content: string, files?: File[]) => {
-      if (!content.trim() && (!files || files.length === 0)) return;
+      // Append an initial empty assistant message
+      addMessage({ role: "assistant", content: "", files: [] });
+      setIsLoading(false);
 
-      const userMessage: Message = {
-        id: crypto.randomUUID(),
-        content,
-        role: "user",
-        files,
-      };
-
-      addMessage(userMessage);
-
-      setIsStreaming(true);
-      setIsLoading(true);
-
-      try {
-        const stream = await getStream(content);
-
-        // Append an initial empty assistant message
-        addMessage({ role: "assistant", content: "", files: [] });
-        setIsLoading(false);
-
-        for await (const chunk of decodeStreamToText(stream)) {
-          appendMessageToChat(chunk);
-        }
-      } catch (error) {
-        addMessage({
-          content: "Something went wrong fetching AI response",
-          role: "assistant",
-        });
-        console.error("Error consuming stream:", error);
-      } finally {
-        setIsLoading(false);
-        setIsStreaming(false);
+      for await (const chunk of decodeStreamToText(stream)) {
+        appendMessageToChat(chunk);
       }
-    },
-    // eslint-disable-next-line
-    [],
-  );
+    } catch (error) {
+      if (error instanceof Error && error.name === "AbortError") {
+        addMessage({
+          content: "Cancelled!",
+          role: "assistant",
+          status: "error",
+        });
+
+        return;
+      }
+
+      addMessage({
+        content: "Something went wrong fetching AI response",
+        role: "assistant",
+      });
+
+      console.error("Error consuming stream:", error);
+    } finally {
+      setIsLoading(false);
+      setIsStreaming(false);
+      abortController.current = null;
+    }
+  };
 
   return (
     <div className="flex flex-col w-full container h-[calc(100vh-65px)] mx-auto">
       <div className="flex-1 overflow-hidden">
-        <ChatMessages messages={messages} isLoading={isLoading} />
+        <ChatMessages messages={messages} />
       </div>
       <div className="p-4 border-t">
         <ChatInput
           onSendMessageAction={handleSendMessage}
-          isLoading={isStreaming}
+          stopStreamingAction={stopStreaming}
         />
       </div>
     </div>
