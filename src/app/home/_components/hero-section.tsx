@@ -69,7 +69,7 @@ export function Hero() {
 						className="relative h-[300px] sm:h-[400px] lg:h-[500px] rounded-xl overflow-hidden"
 					>
 						<Image
-							src="/hero.png?height=500&width=500"
+							src="/hero.png"
 							alt="Organic vegetables"
 							fill
 							className="object-cover"

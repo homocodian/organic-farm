@@ -29,7 +29,7 @@ export async function createProduct(body: ProductInsertSchema) {
 			return { error: "Failed to create product" };
 		}
 
-		revalidateTag("products");
+		revalidateTag("products", "max");
 
 		return { data };
 	} catch (error) {
@@ -61,7 +61,7 @@ export async function updateProduct(body: Partial<ProductInsertSchema>) {
 			return { error: "Failed to create product" };
 		}
 
-		revalidateTag("products");
+		revalidateTag("products", "max");
 
 		return { data };
 	} catch (error) {

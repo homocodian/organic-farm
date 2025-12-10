@@ -76,9 +76,7 @@ export function LearnMode() {
 								<CardHeader className="p-0">
 									<div className="h-48 w-full overflow-hidden">
 										<Image
-											src={`${
-												article.imageUrl
-											}?height=200&width=400&text=Article+${index + 1}`}
+											src={article.imageUrl}
 											alt={article.title}
 											width={400}
 											height={200}

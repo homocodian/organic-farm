@@ -32,7 +32,7 @@ export default function AboutHero() {
 						alt="Farmer in field with technology"
 						className="mx-auto aspect-video overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-last"
 						height={550}
-						src="/hero.png?height=550&width=800"
+						src="/hero.png"
 						width={800}
 					/>
 				</div>

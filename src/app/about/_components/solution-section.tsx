@@ -11,7 +11,7 @@ export default function SolutionSection() {
 						alt="Farmers using digital platform"
 						className="mx-auto aspect-video overflow-hidden rounded-xl object-cover object-center"
 						height={500}
-						src="/images/hero.jpg?height=500&width=800"
+						src="/images/hero.jpg"
 						width={800}
 					/>
 					<div className="flex flex-col justify-center space-y-4">
