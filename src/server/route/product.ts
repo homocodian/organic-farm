@@ -7,6 +7,7 @@ import {
 } from "../db/schema/product";
 import { authHandler } from "../utils/auth-handler";
 import { db } from "../db";
+import { revalidatePath } from "next/cache";
 
 export const product = new Hono<{
 	Variables: {
@@ -40,4 +41,8 @@ export const product = new Hono<{
 		} catch {
 			return c.json({ error: "Error creating product" }, 500);
 		}
+	})
+	.get("/revalidate", async (c) => {
+		revalidatePath("/products", "page");
+		return c.text("Product page is being refreshed");
 	});
