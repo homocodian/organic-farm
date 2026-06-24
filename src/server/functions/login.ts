@@ -10,25 +10,37 @@ import { db } from "../db";
 import { cookies } from "next/headers";
 import { UserRole } from "../db/schema/user";
 
+type LoginState = {
+	previousState: {
+		email?: string;
+	};
+	errors: string[];
+};
+
 export async function login(
-	previousState: unknown,
-	formData: FormData
-): Promise<string[]> {
+	state: LoginState,
+	formData: FormData,
+): Promise<LoginState> {
 	const email = formData.get("email")?.toString();
 	const password = formData.get("password")?.toString();
 
-	const errors = [];
+	const returnState = {
+		previousState: {
+			email: email ?? state.previousState.email ?? "",
+		},
+		errors: [] as string[],
+	};
 
 	if (!email) {
-		errors.push("Email is required");
+		returnState.errors.push("Email is required");
 	}
 
 	if (!password) {
-		errors.push("Password is required");
+		returnState.errors.push("Password is required");
 	}
 
-	if (errors.length > 0) {
-		return errors;
+	if (returnState.errors.length > 0) {
+		return returnState;
 	}
 
 	let role: UserRole = "seller";
@@ -47,8 +59,8 @@ export async function login(
 		});
 
 		if (!user) {
-			errors.push("User not found");
-			return errors;
+			returnState.errors.push("User not found");
+			return returnState;
 		}
 
 		if (user.onboardingCompleted) {
@@ -62,11 +74,12 @@ export async function login(
 		}
 	} catch (error) {
 		if (error instanceof APIError) {
-			console.log(error.message, error.status);
-			return [error.message];
+			returnState.errors.push(error.message);
+			return returnState;
 		}
-		console.error(error);
-		return ["Something went wrong. Please try again later."];
+
+		returnState.errors.push("Something went wrong. Please try again later.");
+		return returnState;
 	}
 
 	if (!onboardingCompleted) {

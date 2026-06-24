@@ -12,7 +12,7 @@ export default async function ReconfirmPage() {
 	}
 
 	if (user.role === "buyer") {
-		redirect("/home");
+		redirect("/products");
 	}
 
 	if (user.role === "seller") {

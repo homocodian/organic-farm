@@ -6,7 +6,12 @@ import { login } from "@/server/functions/login";
 import { useActionState } from "react";
 
 export default function LoginPage() {
-	const [errors, formAction, pending] = useActionState(login, null);
+	const [state, formAction, pending] = useActionState(login, {
+		previousState: {
+			email: "",
+		},
+		errors: [],
+	});
 
 	return (
 		<Shell className="min-h-svh">
@@ -23,7 +28,7 @@ export default function LoginPage() {
 				shouldShowForgotPassword
 				action={formAction}
 				loading={pending}
-				errorMessage={errors}
+				loginFormState={state}
 			/>
 		</Shell>
 	);

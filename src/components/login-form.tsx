@@ -1,4 +1,4 @@
-import { Loader2 } from "lucide-react";
+import { EyeIcon, EyeOff, Loader2 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -6,6 +6,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AppConfig } from "@/lib/app-config";
 import { Google } from "./auth/continue-with-google";
+import React from "react";
+
+type LoginFormState = {
+	previousState: {
+		email?: string;
+		password?: string;
+	};
+	errors: string[];
+};
 
 interface LoginFormProps {
 	action?: React.FormHTMLAttributes<HTMLFormElement>["action"];
@@ -14,9 +23,9 @@ interface LoginFormProps {
 	submitButtonText: string;
 	className?: string;
 	loading?: boolean;
-	errorMessage?: string[] | null;
 	startExtraFields?: React.ReactNode[];
 	endExtraFields?: React.ReactNode[];
+	loginFormState?: LoginFormState;
 }
 
 export function LoginForm({
@@ -26,7 +35,7 @@ export function LoginForm({
 	subHeader,
 	submitButtonText = "Login",
 	loading = false,
-	errorMessage = null,
+	loginFormState,
 	startExtraFields = [],
 	endExtraFields = [],
 }: LoginFormProps) {
@@ -52,6 +61,7 @@ export function LoginForm({
 						required
 						label="Email"
 						id="email"
+						defaultValue={loginFormState?.previousState.email}
 					/>
 					<PasswordField
 						shouldShowForgotPassword={shouldShowForgotPassword}
@@ -62,9 +72,9 @@ export function LoginForm({
 						placeholder="********"
 					/>
 					{endExtraFields.map((field) => field)}
-					{errorMessage?.length ? (
+					{loginFormState?.errors.length ? (
 						<div className="rounded-md border border-destructive bg-destructive/10 p-4 text-destructive">
-							{errorMessage.map((error) => (
+							{loginFormState.errors.map((error) => (
 								<div className="flex items-center gap-2" key={error}>
 									<span
 										className="h-4 w-4 flex-shrink-0 flex items-center justify-center"
@@ -110,8 +120,7 @@ function TextField({ label, ...props }: TextFieldProps) {
 	);
 }
 
-interface PasswordFieldProps
-	extends React.InputHTMLAttributes<HTMLInputElement> {
+interface PasswordFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
 	shouldShowForgotPassword?: boolean;
 	label: string;
 	name: string;
@@ -123,6 +132,8 @@ function PasswordField({
 	name,
 	...props
 }: PasswordFieldProps) {
+	const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
+	const inputRef = React.useRef<HTMLInputElement>(null);
 	return (
 		<div className="grid gap-2">
 			<div className="flex items-center">
@@ -136,7 +147,25 @@ function PasswordField({
 					</a>
 				)}
 			</div>
-			<Input name={name} {...props} type="password" />
+			<Input
+				name={name}
+				{...props}
+				type={isPasswordVisible ? "text" : "password"}
+				ref={inputRef}
+				trailingComponent={
+					<Button
+						variant="ghost"
+						type="button"
+						onClick={() => {
+							setIsPasswordVisible((prev) => !prev);
+							inputRef.current?.focus();
+						}}
+						className="h-8 w-8 p-0"
+					>
+						{isPasswordVisible ? <EyeOff /> : <EyeIcon />}
+					</Button>
+				}
+			/>
 		</div>
 	);
 }
