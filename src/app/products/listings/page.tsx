@@ -10,6 +10,9 @@ async function getProducts(userId: string) {
 			where(fields, operators) {
 				return operators.eq(fields.userId, userId);
 			},
+			orderBy(fields, operators) {
+				return operators.desc(fields.createdAt);
+			},
 		});
 	} catch {
 		return [];

@@ -4,6 +4,8 @@ import { Product } from "@/server/db/schema/product";
 import { AddToCart } from "./add-to-cart";
 import { AppConfig } from "@/lib/app-config";
 import { EditButton } from "../listings/_compenents/edit-button";
+import { useCartStore } from "@/app/context/cart";
+import { Button } from "@/components/ui/button";
 
 interface ProductCardProps {
 	product: Product;
@@ -11,6 +13,10 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, isOwner = false }: ProductCardProps) {
+	const cartItem = useCartStore((state) => state.cart.get(product.id));
+	const incrementQuantity = useCartStore((state) => state.incrementQuantity);
+	const decrementQuantity = useCartStore((state) => state.decrementQuantity);
+
 	return (
 		<div className="bg-card rounded-lg overflow-hidden border hover:shadow-md transition-shadow">
 			<div className="relative h-48 bg-gray-100">
@@ -22,27 +28,6 @@ export function ProductCard({ product, isOwner = false }: ProductCardProps) {
 				/>
 			</div>
 			<div className="p-4">
-				{/* <div className="flex items-center mb-1">
-					<div className="flex text-amber-400">
-						{[...Array(5)].map((_, i) => (
-							<Star
-								key={i}
-								className={`h-4 w-4 ${
-									i < Math.floor(product.rating)
-										? "fill-current"
-										: "stroke-current fill-none"
-								} ${
-									i === Math.floor(product.rating) && product.rating % 1 > 0
-										? "fill-current opacity-50"
-										: ""
-								}`}
-							/>
-						))}
-					</div>
-					<span className="text-xs text-muted-foreground ml-1">
-						{product.rating.toFixed(1)}
-					</span>
-				</div> */}
 				<h3 className="font-medium">{product.name}</h3>
 				<p className="text-sm mb-2 text-card-foreground/70">
 					{product.category} · {product.type}
@@ -53,8 +38,14 @@ export function ProductCard({ product, isOwner = false }: ProductCardProps) {
 					</span>
 					{isOwner ? (
 						<EditButton productId={product.id} />
+					) : cartItem ? (
+						<div>
+							<Button onClick={() => decrementQuantity(product)}>-</Button>
+							<span className="mx-2">{cartItem.quantity}</span>
+							<Button onClick={() => incrementQuantity(product)}>+</Button>
+						</div>
 					) : (
-						<AddToCart productId={product.id} />
+						<AddToCart product={product} />
 					)}
 				</div>
 			</div>

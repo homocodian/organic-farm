@@ -1,23 +1,44 @@
+import React from "react";
+import Image from "next/image";
+
+import { toast } from "sonner";
+import { Minus, Plus, Trash2, Loader2 } from "lucide-react";
+
+import { useCartStore } from "@/app/context/cart";
 import { Button } from "@/components/ui/button";
 import { Product } from "@/server/db/schema/product";
-import { Minus, Plus, Trash2 } from "lucide-react";
-import Image from "next/image";
+import { match } from "@/types";
 
 type CartItemProps = {
 	product: Product;
 	quantity: number;
-	handleRemoveItem: (productId: string) => void;
-	handleUpdateItem: (productId: string, quantity: number) => void;
 };
 
 const excludeQTypes: Product["quantityType"][] = ["Hour"];
 
-export function CartItem({
-	quantity,
-	product,
-	handleRemoveItem,
-	handleUpdateItem,
-}: CartItemProps) {
+export function CartItem({ quantity, product }: CartItemProps) {
+	const incrementQuantity = useCartStore((state) => state.incrementQuantity);
+	const decrementQuantity = useCartStore((state) => state.decrementQuantity);
+	const removeItem = useCartStore((state) => state.removeFromCart);
+	const [isRemovePending, setIsRemovePending] = React.useState(false);
+
+	const handleRemoveItem = async () => {
+		setIsRemovePending(true);
+
+		const _removeItem = await removeItem(product.id);
+		match(_removeItem, {
+			ok: () => {
+				// Item removed successfully
+			},
+			err: (error) => {
+				console.error("Failed to remove item from cart:", error);
+				toast.error("Failed to remove item from cart. Please try again.");
+			},
+		});
+
+		setIsRemovePending(false);
+	};
+
 	return (
 		<div className="grid gap-4 sm:grid-cols-[1fr_auto] sm:gap-6">
 			<div className="grid gap-4 sm:grid-cols-[80px_1fr] sm:gap-6">
@@ -45,7 +66,7 @@ export function CartItem({
 								variant="outline"
 								size="icon"
 								className="h-8 w-8"
-								onClick={() => handleUpdateItem(product.id, quantity - 1)}
+								onClick={() => decrementQuantity(product)}
 							>
 								<Minus className="h-3 w-3" />
 								<span className="sr-only">Decrease quantity</span>
@@ -55,7 +76,7 @@ export function CartItem({
 								variant="outline"
 								size="icon"
 								className="h-8 w-8"
-								onClick={() => handleUpdateItem(product.id, quantity + 1)}
+								onClick={() => incrementQuantity(product)}
 							>
 								<Plus className="h-3 w-3" />
 								<span className="sr-only">Increase quantity</span>
@@ -64,7 +85,7 @@ export function CartItem({
 								variant="outline"
 								size="icon"
 								className="h-8 w-8 ml-auto"
-								onClick={() => handleRemoveItem(product.id)}
+								onClick={() => decrementQuantity(product)}
 							>
 								<Trash2 className="h-3 w-3" />
 								<span className="sr-only">Remove item</span>
@@ -81,7 +102,7 @@ export function CartItem({
 							variant="outline"
 							size="icon"
 							className="h-8 w-8"
-							onClick={() => handleUpdateItem(product.id, quantity - 1)}
+							onClick={() => decrementQuantity(product)}
 						>
 							<Minus className="h-3 w-3" />
 							<span className="sr-only">Decrease quantity</span>
@@ -91,7 +112,7 @@ export function CartItem({
 							variant="outline"
 							size="icon"
 							className="h-8 w-8"
-							onClick={() => handleUpdateItem(product.id, quantity + 1)}
+							onClick={() => incrementQuantity(product)}
 						>
 							<Plus className="h-3 w-3" />
 							<span className="sr-only">Increase quantity</span>
@@ -102,9 +123,14 @@ export function CartItem({
 					variant="ghost"
 					size="sm"
 					className="text-sm text-muted-foreground"
-					onClick={() => handleRemoveItem(product.id)}
+					onClick={handleRemoveItem}
+					disabled={isRemovePending}
 				>
-					<Trash2 className="h-3 w-3 mr-2" />
+					{isRemovePending ? (
+						<Loader2 className="h-3 w-3 mr-2 animate-spin" />
+					) : (
+						<Trash2 className="h-3 w-3 mr-2 text-destructive" />
+					)}
 					Remove
 				</Button>
 			</div>

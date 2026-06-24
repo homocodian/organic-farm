@@ -1,18 +1,14 @@
 "use client";
 
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import React from "react";
+
+import { Card, CardContent } from "@/components/ui/card";
 import { OrderSummary } from "./order-summary";
 import { CartItem } from "./cart-item";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { Product } from "@/server/db/schema/product";
-import { useCallback, useState } from "react";
 import { EmptyCart } from "./empty";
-import {
-	removeItemFromCart,
-	updateItemQuantity,
-} from "@/server/functions/cart";
-import { useRouter } from "next/navigation";
+import { useCartStore } from "@/app/context/cart";
+import { ShoppingCart } from "lucide-react";
 
 export type CartProps = {
 	cartItems: {
@@ -23,49 +19,27 @@ export type CartProps = {
 	cartId: string;
 };
 
-export function Cart({ cartItems, cartId }: CartProps) {
-	const [items, setItems] = useState(() => cartItems);
-	const [isLoading, setIsLoading] = useState(false);
-	const router = useRouter();
+export function Cart() {
+	const cart = useCartStore((state) => state.cart);
+	const cartItems = React.useMemo(() => Array.from(cart.values()), [cart]);
 
-	const clearCart = useCallback(() => {
-		setItems([]);
-	}, []);
+	if (cartItems.length === 0) {
+		return <EmptyCart />;
+	}
 
-	const handleRemoveItem = useCallback(
-		async (productId: string) => {
-			setItems((prevItems) =>
-				prevItems.filter((item) => item.productId !== productId)
-			);
-			await removeItemFromCart(cartId, productId);
-		},
-		[cartId]
+	return (
+		<>
+			<div className="flex items-center gap-2 mb-8">
+				<ShoppingCart className="h-6 w-6" />
+				<h1 className="text-3xl font-bold tracking-tight">Your Cart</h1>
+			</div>
+			<_Cart cartId="cart-id-placeholder" cartItems={cartItems} />
+		</>
 	);
+}
 
-	const handleUpdateItem = useCallback(
-		async (productId: string, quantity: number) => {
-			if (quantity < 1) {
-				handleRemoveItem(productId);
-				return;
-			}
-
-			setItems((prevItems) =>
-				prevItems.map((item) =>
-					item.productId === productId
-						? {
-								...item,
-								quantity,
-						  }
-						: item
-				)
-			);
-
-			await updateItemQuantity(cartId, productId, quantity);
-		},
-		[handleRemoveItem, cartId]
-	);
-
-	if (items.length === 0) {
+function _Cart({ cartItems, cartId }: CartProps) {
+	if (cartItems.length === 0) {
 		return <EmptyCart />;
 	}
 
@@ -75,38 +49,21 @@ export function Cart({ cartItems, cartId }: CartProps) {
 				<Card>
 					<CardContent className="p-6">
 						<div className="grid gap-6">
-							{items.map((item) => (
+							{cartItems.map((item) => (
 								<CartItem
 									key={item.productId}
 									quantity={item.quantity}
 									product={item.product}
-									handleRemoveItem={handleRemoveItem}
-									handleUpdateItem={handleUpdateItem}
 								/>
 							))}
 						</div>
 					</CardContent>
-					<CardFooter className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between p-6 pt-0">
-						<Button variant="outline" asChild>
-							<Link href="/products">Continue Shopping</Link>
-						</Button>
-						<Button
-							variant="outline"
-							onClick={() => {
-								setIsLoading(true);
-								router.refresh();
-							}}
-							disabled={isLoading}
-						>
-							Update Cart
-						</Button>
-					</CardFooter>
 				</Card>
 			</div>
 
 			{/* Order Summary */}
 			<div>
-				<OrderSummary cartId={cartId} cartItems={items} clearCart={clearCart} />
+				<OrderSummary cartId={cartId} cartItems={cartItems} />
 			</div>
 		</div>
 	);

@@ -4,29 +4,22 @@ import { Separator } from "@/components/ui/separator";
 import { CartProps } from "./cart";
 import { useMemo, useState } from "react";
 import { Loader2 } from "lucide-react";
-import { toast } from "sonner";
-import { clearCart as resetCart } from "@/server/functions/cart";
+// import { toast } from "sonner";
 
-interface OrderSummaryProps extends CartProps {
-	clearCart: () => void;
-}
+type OrderSummaryProps = CartProps;
 
-export function OrderSummary({
-	cartItems,
-	clearCart,
-	cartId,
-}: OrderSummaryProps) {
+export function OrderSummary({ cartItems }: OrderSummaryProps) {
 	const subTotal = useMemo(() => {
 		return cartItems.reduce(
 			(acc, item) => acc + item.product.amount * item.quantity,
-			0
+			0,
 		);
 	}, [cartItems]);
 
 	const shipping = 0; // Assuming free shipping for now
 	const total = subTotal + shipping;
 
-	const [loading, setLoading] = useState(false);
+	const [loading] = useState(false);
 
 	return (
 		<Card>
@@ -52,14 +45,14 @@ export function OrderSummary({
 				<Button
 					className="w-full"
 					onClick={async () => {
-						setLoading(true);
-						const data = await resetCart(cartId);
-						if (data.error) {
-							toast.error("Failed to clear cart");
-							setLoading(false);
-						}
-						clearCart();
-						setLoading(false);
+						// setLoading(true);
+						// const data = await resetCart(cartId);
+						// if (data.error) {
+						// 	toast.error("Failed to clear cart");
+						// 	setLoading(false);
+						// }
+						// // clearCart();
+						// setLoading(false);
 					}}
 					disabled={loading}
 				>

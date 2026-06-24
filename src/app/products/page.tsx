@@ -20,12 +20,12 @@ const getProducts = unstable_cache(
 	{
 		revalidate: 3600,
 		tags: ["products"],
-	}
+	},
 );
 
 export default async function ProductListingPage() {
-	console.log("Refreshing product page...");
 	const products = await getProducts();
+
 	return (
 		<>
 			<Header />

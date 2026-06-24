@@ -1,7 +1,6 @@
 import { ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { Suspense } from "react";
 import { UserAccount } from "./user-account";
 import { AppConfig } from "@/lib/app-config";
 import { CartCount } from "@/components/cart-count";
@@ -18,7 +17,7 @@ export function Header({ showCart = true }: HeaderProps) {
 		<header
 			className={cn(
 				"sticky px-4 top-0 z-40 w-full border-b bg-background/95",
-				"backdrop-blur supports-[backdrop-filter]:bg-background/60"
+				"backdrop-blur supports-[backdrop-filter]:bg-background/60",
 			)}
 		>
 			<div className="container mx-auto flex h-16 items-center justify-between">
@@ -42,7 +41,7 @@ export function Header({ showCart = true }: HeaderProps) {
 										"font-medium transition-colors hover:bg-accent",
 										"hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
 										"focus:outline-none disabled:pointer-events-none disabled:opacity-50",
-										"data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
+										"data-[active]:bg-accent/50 data-[state=open]:bg-accent/50",
 									)}
 								>
 									{link.icon && <link.icon className="size-4" />}
@@ -59,9 +58,7 @@ export function Header({ showCart = true }: HeaderProps) {
 						<Button variant="outline" size="icon" className="relative" asChild>
 							<Link href="/cart">
 								<ShoppingCart className="h-5 w-5" />
-								<Suspense>
-									<CartCount />
-								</Suspense>
+								<CartCount />
 							</Link>
 						</Button>
 					)}

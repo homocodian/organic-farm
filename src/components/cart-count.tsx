@@ -1,23 +1,17 @@
-import { db } from "@/server/db";
-import { cart, cartItem } from "@/server/db/schema/cart";
-import { eq, sql } from "drizzle-orm";
-import { getCurrentUser } from "@/lib/session";
+"use client";
+
 import { Badge } from "./ui/badge";
+import { useCartStore } from "@/app/context/cart";
+import React from "react";
 
-export async function CartCount() {
-	const user = await getCurrentUser();
+export function CartCount() {
+	const getCartCount = useCartStore((state) => state.getCartCount);
+	const [count, setCount] = React.useState<number | null>(() => getCartCount());
+	const cart = useCartStore((state) => state.cart);
 
-	if (!user) {
-		return null;
-	}
-
-	const [{ count }] = await db
-		.select({
-			count: sql<number>`count(${cartItem.productId})`,
-		})
-		.from(cart)
-		.innerJoin(cartItem, eq(cart.id, cartItem.cartId))
-		.where(eq(cart.userId, user.id));
+	React.useEffect(() => {
+		setCount(getCartCount());
+	}, [cart, getCartCount]);
 
 	if (count === null || count <= 0) {
 		return null;
