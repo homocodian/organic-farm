@@ -1,7 +1,5 @@
-import { relations } from "drizzle-orm";
 import { pgTable, text, uuid, index } from "drizzle-orm/pg-core";
 import { user } from "./user";
-import { address } from "./address";
 
 export const supplier = pgTable(
 	"supplier",
@@ -13,13 +11,5 @@ export const supplier = pgTable(
 		companyName: text("company_name").notNull(),
 		license: text("license").notNull(),
 	},
-	(t) => [index("supplier_user_idx").on(t.userId)]
+	(t) => [index("supplier_user_idx").on(t.userId)],
 );
-
-export const supplierRelations = relations(supplier, ({ one }) => ({
-	user: one(user, { fields: [supplier.userId], references: [user.id] }),
-	address: one(address, {
-		fields: [supplier.id],
-		references: [address.supplierId],
-	}),
-}));

@@ -5,6 +5,7 @@ import * as user from "./schema/user";
 import * as address from "./schema/address";
 import * as product from "./schema/product";
 import * as cart from "./schema/cart";
+import * as relations from "./schema/relations";
 
 // Disable prefetch as it is not supported for "Transaction" pool mode
 const client = postgres(process.env.DATABASE_URL!, { prepare: false });
@@ -14,5 +15,6 @@ export const db = drizzle(client, {
 		...address,
 		...product,
 		...cart,
+		...relations,
 	},
 });

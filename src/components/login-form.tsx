@@ -9,7 +9,7 @@ import { Google } from "./auth/continue-with-google";
 import React from "react";
 
 type LoginFormState = {
-	previousState: {
+	previousState?: {
 		email?: string;
 		password?: string;
 	};
@@ -61,7 +61,7 @@ export function LoginForm({
 						required
 						label="Email"
 						id="email"
-						defaultValue={loginFormState?.previousState.email}
+						defaultValue={loginFormState?.previousState?.email}
 					/>
 					<PasswordField
 						shouldShowForgotPassword={shouldShowForgotPassword}

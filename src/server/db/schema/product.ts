@@ -8,7 +8,6 @@ import {
 	timestamp,
 } from "drizzle-orm/pg-core";
 import { user } from "./user";
-import { relations } from "drizzle-orm";
 import { cartItem } from "./cart";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
@@ -95,16 +94,8 @@ export const product = pgTable(
 			.defaultNow()
 			.$onUpdate(() => new Date()),
 	},
-	(t) => [index("product_user_idx").on(t.userId)]
+	(t) => [index("product_user_idx").on(t.userId)],
 );
-
-export const productRelations = relations(product, ({ one, many }) => ({
-	user: one(user, {
-		fields: [product.userId],
-		references: [user.id],
-	}),
-	cartItems: many(cartItem),
-}));
 
 export const productInsertSchema = createInsertSchema(product).omit({
 	id: true,

@@ -1,4 +1,3 @@
-import { relations } from "drizzle-orm";
 import {
 	integer,
 	pgTable,
@@ -19,7 +18,7 @@ export const cart = pgTable(
 			.notNull()
 			.references(() => user.id, { onDelete: "cascade" }),
 	},
-	(t) => [index("cart_user_idx").on(t.userId)]
+	(t) => [index("cart_user_idx").on(t.userId)],
 );
 
 export const cartItem = pgTable(
@@ -40,17 +39,5 @@ export const cartItem = pgTable(
 			.defaultNow()
 			.$onUpdate(() => new Date()),
 	},
-	(table) => [primaryKey({ columns: [table.cartId, table.productId] })]
+	(table) => [primaryKey({ columns: [table.cartId, table.productId] })],
 );
-
-export const cartsRelations = relations(cart, ({ many }) => ({
-	cartItems: many(cartItem),
-}));
-
-export const cartItemsRelations = relations(cartItem, ({ one }) => ({
-	product: one(product, {
-		fields: [cartItem.productId],
-		references: [product.id],
-	}),
-	cart: one(cart, { fields: [cartItem.cartId], references: [cart.id] }),
-}));

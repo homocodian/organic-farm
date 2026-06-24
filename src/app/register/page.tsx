@@ -23,7 +23,9 @@ export default function RegisterPage() {
 				submitButtonText="Register"
 				action={formAction}
 				loading={pending}
-				errorMessage={errors}
+				loginFormState={{
+					errors: errors ?? [],
+				}}
 				startExtraFields={[
 					<LoginForm.TextField
 						key={"name"}

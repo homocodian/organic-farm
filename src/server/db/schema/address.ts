@@ -1,4 +1,3 @@
-import { relations } from "drizzle-orm";
 import {
 	integer,
 	pgTable,
@@ -35,16 +34,5 @@ export const address = pgTable(
 			.defaultNow()
 			.$onUpdate(() => new Date()),
 	},
-	(t) => [index("address_user_idx").on(t.userId)]
+	(t) => [index("address_user_idx").on(t.userId)],
 );
-
-export const addressRelation = relations(address, ({ one }) => ({
-	user: one(user, {
-		fields: [address.userId],
-		references: [user.id],
-	}),
-	supplier: one(supplier, {
-		fields: [address.supplierId],
-		references: [supplier.id],
-	}),
-}));

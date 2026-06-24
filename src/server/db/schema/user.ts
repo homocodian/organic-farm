@@ -1,8 +1,4 @@
-import { relations } from "drizzle-orm";
 import { pgTable, text, timestamp, boolean, pgEnum } from "drizzle-orm/pg-core";
-import { address } from "./address";
-import { supplier } from "./supplier";
-import { cart } from "./cart";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 export const userRole = pgEnum("role", ["buyer", "seller", "supplier"]);
@@ -63,15 +59,6 @@ export const verification = pgTable("verification", {
 	createdAt: timestamp("created_at"),
 	updatedAt: timestamp("updated_at"),
 });
-
-export const userRelations = relations(user, ({ one, many }) => ({
-	supplier: one(supplier),
-	addresses: many(address),
-	cart: one(cart, {
-		fields: [user.id],
-		references: [cart.userId],
-	}),
-}));
 
 export const userInsertSchema = createInsertSchema(user).omit({
 	id: true,
