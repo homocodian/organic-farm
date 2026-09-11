@@ -59,6 +59,7 @@ export function OrderSummary({ items: cartItems }: OrderSummaryProps) {
 							throw new Error("Payment verification failed");
 						toast.success("Payment verified successfully");
 					} catch (error) {
+						console.error("Payment verification error:", error);
 						toast.error(
 							error instanceof Error
 								? error.message
@@ -95,7 +96,7 @@ export function OrderSummary({ items: cartItems }: OrderSummaryProps) {
 					<div className="grid gap-3">
 						<div className="flex items-center justify-between">
 							<span className="text-muted-foreground">Subtotal</span>
-							<span>${subTotal.toFixed(2)}</span>
+							<span>₹{subTotal.toFixed(2)}</span>
 						</div>
 						<div className="flex items-center justify-between">
 							<span className="text-muted-foreground">Shipping</span>

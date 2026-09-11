@@ -60,6 +60,7 @@ export const payment = new Hono()
 				201,
 			);
 		} catch (error) {
+			console.log("Error creating Razorpay order:", error);
 			const statusCode =
 				typeof error === "object" &&
 				error !== null &&
