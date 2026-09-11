@@ -23,6 +23,7 @@ export async function login(
 ): Promise<LoginState> {
 	const email = formData.get("email")?.toString();
 	const password = formData.get("password")?.toString();
+	const redirectUrl = formData.get("redirect")?.toString();
 
 	const returnState = {
 		previousState: {
@@ -86,11 +87,17 @@ export async function login(
 		redirect("/user/onboarding");
 	}
 
-	if (role === "buyer") {
-		redirect("/home");
-	} else if (role === "seller" || role === "supplier") {
-		redirect("/dashboard");
-	} else {
-		redirect(AppConfig.callbackURL);
+	if (redirectUrl) {
+		redirect(redirectUrl);
+	}
+
+	switch (role) {
+		case "buyer":
+			return redirect("/home");
+		case "seller":
+		case "supplier":
+			return redirect("/dashboard");
+		default:
+			return redirect(AppConfig.callbackURL);
 	}
 }

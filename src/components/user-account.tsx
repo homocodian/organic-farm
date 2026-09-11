@@ -13,7 +13,7 @@ import { UserIcon } from "lucide-react";
 import { authClient } from "@/lib/client-auth";
 import { Button } from "./ui/button";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCartStore } from "@/app/context/cart";
 
 const navItems = [
@@ -28,6 +28,8 @@ export function UserAccount() {
 	const [loading, setLoading] = useState(false);
 	const router = useRouter();
 	const resetCart = useCartStore((state) => state.resetCart);
+	const pathname = usePathname();
+	const searchParams = useSearchParams();
 
 	if (session.isPending) {
 		return (
@@ -101,8 +103,16 @@ export function UserAccount() {
 						event.preventDefault();
 						setLoading(true);
 						await authClient.signOut();
+
+						const redirectUrl =
+							pathname +
+							(searchParams.toString() ? `?${searchParams.toString()}` : "");
+
 						resetCart();
-						router.push("/login");
+
+						router.push(
+							`/login${redirectUrl ? `?redirect=${encodeURIComponent(redirectUrl)}` : ""}`,
+						);
 						setLoading(false);
 					}}
 					disabled={loading}

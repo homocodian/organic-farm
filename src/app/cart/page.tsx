@@ -11,7 +11,7 @@ import { CartItem } from "@/lib/store/cart";
 export default async function CartPage() {
 	const [user, cartData] = await Promise.all([getCurrentUser(), getCartData()]);
 	if (!user) {
-		redirect("/login");
+		redirect("/login?redirect=/cart");
 	}
 
 	let initialCartItems: CartItem[] = [];
