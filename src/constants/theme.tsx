@@ -1,1 +1,1 @@
-export const defaultTheme: "system" | "light" | "dark" = "system";
+export const defaultTheme: "system" | "light" | "dark" = "light";
