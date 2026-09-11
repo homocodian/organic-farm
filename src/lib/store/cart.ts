@@ -64,7 +64,7 @@ export const createCartStore = (initialCartItems: Cart = new Map()) => {
 					set({ cart: cartItemsMap });
 				},
 				err: (error) => {
-					console.error("Failed to fetch cart data:", error);
+					console.log("Failed to fetch cart data:", error);
 				},
 			});
 		},

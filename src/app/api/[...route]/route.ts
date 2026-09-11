@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { chat } from "@/server/route/chat";
 import { product } from "@/server/route/product";
 import { user } from "@/server/route/user";
+import { payment } from "@/server/route/payment";
 import { Hono } from "hono";
 import { handle } from "hono/vercel";
 
@@ -17,6 +18,7 @@ const app = new Hono()
 	})
 	.route("/user", user)
 	.route("/products", product)
+	.route("/payment", payment)
 	.route("/chat", chat);
 
 app.on(["POST", "GET"], "/auth/*", (c) => {
