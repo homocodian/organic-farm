@@ -3,7 +3,7 @@
 import { LoginForm } from "@/components/login-form";
 import { Shell } from "@/components/shell";
 import { login } from "@/server/functions/login";
-import { useActionState } from "react";
+import { Suspense, useActionState } from "react";
 import { CaptureRedirectUrl } from "./_components/capture-redirect-url";
 
 export default function LoginPage() {
@@ -30,7 +30,11 @@ export default function LoginPage() {
 				action={formAction}
 				loading={pending}
 				loginFormState={state}
-				endExtraFields={[<CaptureRedirectUrl key="capture-redirect" />]}
+				endExtraFields={[
+					<Suspense key="capture-redirect">
+						<CaptureRedirectUrl />
+					</Suspense>,
+				]}
 			/>
 		</Shell>
 	);

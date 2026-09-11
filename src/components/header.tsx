@@ -1,4 +1,4 @@
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, UserIcon } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { UserAccount } from "./user-account";
@@ -7,6 +7,8 @@ import { CartCount } from "@/components/cart-count";
 import { links } from "@/constants/links";
 import { HeaderMobileMenu } from "./header-mobile-menu";
 import { cn } from "@/lib/utils";
+import { Suspense } from "react";
+import { Avatar, AvatarFallback } from "./ui/avatar";
 
 export type HeaderProps = {
 	showCart?: boolean;
@@ -53,7 +55,18 @@ export function Header({ showCart = true }: HeaderProps) {
 				</div>
 
 				<div className="flex items-center gap-4">
-					<UserAccount />
+					<Suspense
+						fallback={
+							<Avatar>
+								<AvatarFallback>
+									<UserIcon className="h-4 w-4" />
+								</AvatarFallback>
+							</Avatar>
+						}
+					>
+						<UserAccount />
+					</Suspense>
+
 					{showCart && (
 						<Button variant="outline" size="icon" className="relative" asChild>
 							<Link href="/cart">
