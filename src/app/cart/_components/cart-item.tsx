@@ -14,8 +14,6 @@ type CartItemProps = {
 	quantity: number;
 };
 
-const excludeQTypes: Product["quantityType"][] = ["Hour"];
-
 export function CartItem({ quantity, product }: CartItemProps) {
 	const incrementQuantity = useCartStore((state) => state.incrementQuantity);
 	const decrementQuantity = useCartStore((state) => state.decrementQuantity);
@@ -40,99 +38,65 @@ export function CartItem({ quantity, product }: CartItemProps) {
 	};
 
 	return (
-		<div className="grid gap-4 sm:grid-cols-[1fr_auto] sm:gap-6">
-			<div className="grid gap-4 sm:grid-cols-[80px_1fr] sm:gap-6">
-				<div className="relative aspect-square h-20 w-20 min-w-fit overflow-hidden rounded-md bg-muted">
-					<Image
-						src={product.imageUrl ?? "/placeholder.jpeg?height=80&width=80"}
-						alt="Product 1"
-						fill
-						className="object-cover"
-					/>
-				</div>
-				<div className="grid gap-1">
-					<h3 className="font-semibold">{product.name}</h3>
-					<div className="text-sm text-muted-foreground">
-						{product.category}
-					</div>
-					<div className="font-medium">
-						₹{product.amount.toFixed(2)}/{product.quantityType}
-					</div>
-
-					{product.category === "Machinery" ||
-					excludeQTypes.includes(product.quantityType) ? null : (
-						<div className="flex items-center gap-2 sm:hidden">
-							<Button
-								variant="outline"
-								size="icon"
-								className="h-8 w-8"
-								onClick={() => decrementQuantity(product)}
-							>
-								<Minus className="h-3 w-3" />
-								<span className="sr-only">Decrease quantity</span>
-							</Button>
-							<span className="text-sm">{quantity}</span>
-							<Button
-								variant="outline"
-								size="icon"
-								className="h-8 w-8"
-								onClick={() => incrementQuantity(product)}
-							>
-								<Plus className="h-3 w-3" />
-								<span className="sr-only">Increase quantity</span>
-							</Button>
-							<Button
-								variant="outline"
-								size="icon"
-								className="h-8 w-8 ml-auto"
-								onClick={() => decrementQuantity(product)}
-							>
-								<Trash2 className="h-3 w-3" />
-								<span className="sr-only">Remove item</span>
-							</Button>
-						</div>
-					)}
-				</div>
+		<div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 sm:gap-5">
+			<div className="relative aspect-[4/3] h-full min-h-20 self-stretch overflow-hidden rounded-md bg-muted">
+				<Image
+					src={product.imageUrl ?? "/placeholder.jpeg?height=80&width=80"}
+					alt={product.name}
+					fill
+					className="object-cover"
+				/>
 			</div>
-			<div className="hidden sm:flex sm:flex-col sm:items-center sm:gap-2">
-				{product.category === "Machinery" ||
-				excludeQTypes.includes(product.quantityType) ? null : (
-					<div className="flex items-center gap-2">
+			<div className="grid min-w-0 content-center gap-1">
+				<h3 className="line-clamp-2 font-semibold leading-snug">{product.name}</h3>
+				<div className="truncate text-sm text-muted-foreground">
+					{product.category}
+				</div>
+				<div className="mt-2 flex min-h-9 items-center gap-2">
+					<div className="flex h-9 items-center rounded-md border bg-background shadow-xs">
 						<Button
 							variant="outline"
 							size="icon"
-							className="h-8 w-8"
+							className="h-8 w-8 rounded-r-none border-0 border-r shadow-none"
 							onClick={() => decrementQuantity(product)}
+							aria-label={`Decrease quantity of ${product.name}`}
 						>
 							<Minus className="h-3 w-3" />
-							<span className="sr-only">Decrease quantity</span>
 						</Button>
-						<span className="text-sm w-4 text-center">{quantity}</span>
+						<span className="min-w-9 px-2 text-center text-sm font-semibold tabular-nums">
+							{quantity}
+						</span>
 						<Button
 							variant="outline"
 							size="icon"
-							className="h-8 w-8"
+							className="h-8 w-8 rounded-l-none border-0 border-l shadow-none"
 							onClick={() => incrementQuantity(product)}
+							aria-label={`Increase quantity of ${product.name}`}
 						>
 							<Plus className="h-3 w-3" />
-							<span className="sr-only">Increase quantity</span>
 						</Button>
 					</div>
-				)}
 				<Button
-					variant="ghost"
-					size="sm"
-					className="text-sm text-muted-foreground"
+					variant="outline"
+					size="icon"
+					className="h-9 w-9 text-muted-foreground hover:border-destructive/50 hover:bg-destructive/10 hover:text-destructive"
 					onClick={handleRemoveItem}
 					disabled={isRemovePending}
+					aria-label={`Delete ${product.name} from cart`}
 				>
 					{isRemovePending ? (
-						<Loader2 className="h-3 w-3 mr-2 animate-spin" />
+						<Loader2 className="h-4 w-4 animate-spin" />
 					) : (
-						<Trash2 className="h-3 w-3 mr-2 text-destructive" />
+						<Trash2 className="h-4 w-4" />
 					)}
-					Remove
 				</Button>
+			</div>
+			</div>
+			<div className="self-center text-right">
+				<div className="whitespace-nowrap text-sm font-semibold sm:text-base">
+					₹{product.amount.toFixed(2)}
+				</div>
+				<div className="text-xs text-muted-foreground">/{product.quantityType}</div>
 			</div>
 		</div>
 	);

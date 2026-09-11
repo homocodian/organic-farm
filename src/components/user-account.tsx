@@ -14,6 +14,7 @@ import { authClient } from "@/lib/client-auth";
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useCartStore } from "@/app/context/cart";
 
 const navItems = [
 	{
@@ -26,6 +27,7 @@ export function UserAccount() {
 	const session = authClient.useSession();
 	const [loading, setLoading] = useState(false);
 	const router = useRouter();
+	const resetCart = useCartStore((state) => state.resetCart);
 
 	if (session.isPending) {
 		return (
@@ -99,6 +101,7 @@ export function UserAccount() {
 						event.preventDefault();
 						setLoading(true);
 						await authClient.signOut();
+						resetCart();
 						router.push("/login");
 						setLoading(false);
 					}}

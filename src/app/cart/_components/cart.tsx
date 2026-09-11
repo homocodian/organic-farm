@@ -11,7 +11,7 @@ import { useCartStore } from "@/app/context/cart";
 import { ShoppingCart } from "lucide-react";
 
 export type CartProps = {
-	cartItems: {
+	items: {
 		productId: string;
 		quantity: number;
 		product: Product;
@@ -33,12 +33,12 @@ export function Cart() {
 				<ShoppingCart className="h-6 w-6" />
 				<h1 className="text-3xl font-bold tracking-tight">Your Cart</h1>
 			</div>
-			<_Cart cartId="cart-id-placeholder" cartItems={cartItems} />
+			<CartItems cartId="cart-id-placeholder" items={cartItems} />
 		</>
 	);
 }
 
-function _Cart({ cartItems, cartId }: CartProps) {
+function CartItems({ items: cartItems, cartId }: CartProps) {
 	if (cartItems.length === 0) {
 		return <EmptyCart />;
 	}
@@ -63,7 +63,7 @@ function _Cart({ cartItems, cartId }: CartProps) {
 
 			{/* Order Summary */}
 			<div>
-				<OrderSummary cartId={cartId} cartItems={cartItems} />
+				<OrderSummary cartId={cartId} items={cartItems} />
 			</div>
 		</div>
 	);

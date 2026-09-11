@@ -22,8 +22,10 @@ export type Cart = Map<ProductId, CartItem>;
 interface StoreState {
 	cart: Cart;
 
+	isFetchingCart: boolean;
 	fetchCart: () => Promise<void>;
 	setCart: (cart: Cart) => void;
+	setIsFetchingCart: (isFetching: boolean) => void;
 
 	// Cart actions
 	addToCart: (
@@ -41,18 +43,30 @@ interface StoreState {
 	) => ReturnType<typeof removeItemFromCart>;
 	clearCart: () => ReturnType<typeof clearCart>;
 
+	// Actions
+	resetCart: () => void;
+
 	// Selectors/helpers
 	getCartQuantity: (productId: ProductId) => number;
 	getCartCount: () => number;
 }
 
-export const createCartStore = (initialCartItems: Cart = new Map()) => {
+export const createCartStore = (
+	initialCartItems: Cart = new Map(),
+	isFetchingCart = true,
+) => {
 	return create<StoreState>((set, get) => ({
 		cart: initialCartItems,
 
+		isFetchingCart,
+		setIsFetchingCart: (isFetching) => set({ isFetchingCart: isFetching }),
+
 		setCart: (cart) => set({ cart }),
 
+		resetCart: () => set({ cart: new Map() }),
+
 		fetchCart: async () => {
+			get().setIsFetchingCart(true);
 			const cartData = await getCartData();
 
 			match(cartData, {
@@ -67,6 +81,8 @@ export const createCartStore = (initialCartItems: Cart = new Map()) => {
 					console.log("Failed to fetch cart data:", error);
 				},
 			});
+
+			get().setIsFetchingCart(false);
 		},
 
 		addToCart: async (product: CartItem["product"], quantity = 1) => {

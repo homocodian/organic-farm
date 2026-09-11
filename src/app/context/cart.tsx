@@ -1,24 +1,41 @@
 "use client";
 
-import { CartStore, createCartStore } from "@/lib/store/cart";
+import { CartItem, CartStore, createCartStore } from "@/lib/store/cart";
 import React from "react";
 import { useStore } from "zustand";
+import { usePathname } from "next/navigation";
 
 const CartContext = React.createContext<CartStore | null>(null);
 
 type CartState = ReturnType<CartStore["getState"]>;
 
-export const CartProvider = ({ children }: { children: React.ReactNode }) => {
+type CartProviderProps = {
+	children: React.ReactNode;
+	initialCartItems?: CartItem[];
+};
+
+export const CartProvider = ({
+	children,
+	initialCartItems,
+}: CartProviderProps) => {
 	const storeRef = React.useRef<CartStore>(null);
+	const pathname = usePathname();
 
 	if (!storeRef.current) {
-		storeRef.current = createCartStore();
+		const initialCart = new Map(
+			initialCartItems?.map((item) => [item.productId, item]) ?? [],
+		);
+		storeRef.current = createCartStore(
+			initialCart,
+			initialCartItems === undefined,
+		);
 	}
 
 	React.useEffect(() => {
-		// Fetch cart data when the component mounts
-		storeRef.current?.getState().fetchCart();
-	}, []);
+		if (initialCartItems === undefined && pathname !== "/cart") {
+			storeRef.current?.getState().fetchCart();
+		}
+	}, [initialCartItems, pathname]);
 
 	return (
 		<CartContext.Provider value={storeRef.current}>

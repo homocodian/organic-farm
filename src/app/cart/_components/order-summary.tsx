@@ -10,7 +10,7 @@ import { getRazorpay } from "@/lib/razorpay";
 
 type OrderSummaryProps = CartProps;
 
-export function OrderSummary({ cartItems }: OrderSummaryProps) {
+export function OrderSummary({ items: cartItems }: OrderSummaryProps) {
 	const subTotal = useMemo(() => {
 		return cartItems.reduce(
 			(acc, item) => acc + item.product.amount * item.quantity,
