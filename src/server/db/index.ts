@@ -5,6 +5,7 @@ import * as user from "./schema/user";
 import * as address from "./schema/address";
 import * as product from "./schema/product";
 import * as cart from "./schema/cart";
+import * as order from "./schema/order";
 import * as relations from "./schema/relations";
 
 // Disable prefetch as it is not supported for "Transaction" pool mode
@@ -15,6 +16,7 @@ export const db = drizzle(client, {
 		...address,
 		...product,
 		...cart,
+		...order,
 		...relations,
 	},
 });

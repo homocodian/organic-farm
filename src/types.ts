@@ -155,6 +155,18 @@ export const match = <T, E, R>(
 	handlers: MatchHandlers<T, E, R>,
 ): R => (isOk(result) ? handlers.ok(result.value) : handlers.err(result.error));
 
+/**
+ * Async counterpart to `match` for handlers that return promises.
+ */
+export const matchAsync = async <T, E, R>(
+	result: Result<T, E>,
+	handlers: {
+		ok: (value: T) => R | Promise<R>;
+		err: (error: E) => R | Promise<R>;
+	},
+): Promise<R> =>
+	isOk(result) ? handlers.ok(result.value) : handlers.err(result.error);
+
 // ---------------------------------------------------------------------------
 // 7. Collection Utilities
 // ---------------------------------------------------------------------------

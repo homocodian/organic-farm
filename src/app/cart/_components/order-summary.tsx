@@ -7,6 +7,7 @@ import { Loader2 } from "lucide-react";
 import Script from "next/script";
 import { toast } from "sonner";
 import { getRazorpay } from "@/lib/razorpay";
+import { useCartStore } from "@/app/context/cart";
 
 type OrderSummaryProps = CartProps;
 
@@ -22,6 +23,7 @@ export function OrderSummary({ items: cartItems }: OrderSummaryProps) {
 	const total = subTotal + shipping;
 
 	const [loading, setLoading] = useState(false);
+	const resetCart = useCartStore((state) => state.resetCart);
 
 	const createOrder = async () => {
 		setLoading(true);
@@ -30,7 +32,6 @@ export function OrderSummary({ items: cartItems }: OrderSummaryProps) {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({
-					amount: Math.round(total * 100),
 					currency: "INR",
 					receipt: `cart_${Date.now()}`,
 				}),
@@ -55,9 +56,11 @@ export function OrderSummary({ items: cartItems }: OrderSummaryProps) {
 							headers: { "Content-Type": "application/json" },
 							body: JSON.stringify(paymentResponse),
 						});
+						const result = await verification.json();
 						if (!verification.ok)
-							throw new Error("Payment verification failed");
-						toast.success("Payment verified successfully");
+							throw new Error(result.error ?? "Payment verification failed");
+						resetCart();
+						toast.success("Payment successful! Your order has been placed.");
 					} catch (error) {
 						console.error("Payment verification error:", error);
 						toast.error(
@@ -68,12 +71,34 @@ export function OrderSummary({ items: cartItems }: OrderSummaryProps) {
 					}
 				},
 				modal: {
-					ondismiss: () => toast.info("Payment cancelled"),
+					ondismiss: async () => {
+						await fetch("/api/payment/failed", {
+							method: "POST",
+							headers: { "Content-Type": "application/json" },
+							body: JSON.stringify({
+								razorpay_order_id: order.order_id,
+								status: "cancelled",
+								reason: "Payment checkout was cancelled",
+							}),
+						});
+						toast.info("Payment cancelled");
+					},
 				},
 			});
-			checkout.on("payment.failed", () =>
-				toast.error("Payment failed. Please try again."),
-			);
+			checkout.on("payment.failed", async (failure) => {
+				await fetch("/api/payment/failed", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({
+						razorpay_order_id: order.order_id,
+						reason:
+							failure.error?.description ?? "Payment failed. Please try again.",
+					}),
+				});
+				toast.error(
+					failure.error?.description ?? "Payment failed. Please try again.",
+				);
+			});
 			checkout.open();
 		} catch (error) {
 			toast.error(

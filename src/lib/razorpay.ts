@@ -4,6 +4,13 @@ export interface RazorpayPaymentResponse {
 	razorpay_signature: string;
 }
 
+export interface RazorpayPaymentFailure {
+	error?: {
+		description?: string;
+	};
+	metadata?: { order_id?: string };
+}
+
 export interface RazorpayOptions {
 	key: string | undefined;
 	amount: number;
@@ -17,7 +24,10 @@ export interface RazorpayOptions {
 
 export interface RazorpayCheckout {
 	open: () => void;
-	on: (event: "payment.failed", handler: () => void) => void;
+	on: (
+		event: "payment.failed",
+		handler: (response: RazorpayPaymentFailure) => void,
+	) => void;
 }
 
 interface RazorpayWindow extends Window {
