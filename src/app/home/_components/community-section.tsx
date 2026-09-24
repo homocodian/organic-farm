@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 
 export function Community() {
 	return (
-		<section className="w-full py-12 md:py-24 lg:py-32">
+		<section className="w-full py-12 md:py-24 lg:py-32 xl:py-28">
 			<div className="container mx-auto px-4 md:px-6">
 				<div className="grid gap-10 px-10 md:gap-16 lg:grid-cols-2">
 					<motion.div

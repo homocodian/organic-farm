@@ -14,9 +14,12 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 
-export function LearnMode() {
+export function LearnMore() {
 	return (
-		<section className="w-full py-12 md:py-24 lg:py-32 bg-primary/5" id="learn">
+		<section
+			className="w-full py-12 md:py-24 lg:py-32 xl:py-28 bg-primary/5"
+			id="learn"
+		>
 			<div className="container mx-auto px-4 md:px-6">
 				<motion.div
 					className="flex flex-col items-center justify-center space-y-4 text-center mb-12"

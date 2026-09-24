@@ -16,13 +16,6 @@ import { useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCartStore } from "@/app/context/cart";
 
-const navItems = [
-	{
-		title: "Dashboard",
-		href: "/dashboard",
-	},
-];
-
 export function UserAccount() {
 	const session = authClient.useSession();
 	const [loading, setLoading] = useState(false);
@@ -50,6 +43,16 @@ export function UserAccount() {
 	}
 
 	const user = session.data.user;
+
+	const navItems =
+		user.role !== "buyer"
+			? [
+					{
+						title: "Dashboard",
+						href: "/dashboard",
+					},
+				]
+			: [];
 
 	return (
 		<DropdownMenu>
@@ -90,7 +93,7 @@ export function UserAccount() {
 						)}
 					</div>
 				</div>
-				<DropdownMenuSeparator />
+				{navItems.length > 0 && <DropdownMenuSeparator />}
 				{navItems.map((item) => (
 					<DropdownMenuItem asChild key={item.title}>
 						<Link href={item.href || "#"}>{item.title}</Link>

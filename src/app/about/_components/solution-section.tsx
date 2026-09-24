@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function SolutionSection() {
 	return (
-		<section className="w-full py-12 md:py-24 lg:py-32 bg-background">
+		<section className="w-full py-12 md:py-24 lg:py-32 xl:py-28 bg-background">
 			<div className="container mx-auto px-4 md:px-6">
 				<div className="grid gap-6 lg:grid-cols-2 lg:gap-12 xl:grid-cols-2">
 					<Image
@@ -70,10 +70,10 @@ export default function SolutionSection() {
 							</li>
 						</ul>
 						<div className="flex flex-col gap-2 min-[400px]:flex-row">
-							<Link href="/marketplace">
+							<Link href="/products">
 								<Button>Explore Marketplace</Button>
 							</Link>
-							<Link href="/equipment">
+							<Link href="/products?category=machinery">
 								<Button variant="outline">Browse Equipment</Button>
 							</Link>
 						</div>
