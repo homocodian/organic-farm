@@ -9,10 +9,19 @@ import { HeaderMobileMenu } from "./header-mobile-menu";
 import { cn } from "@/lib/utils";
 import { Suspense } from "react";
 import { Avatar, AvatarFallback } from "./ui/avatar";
-
+import { Sparkles } from "lucide-react";
 export type HeaderProps = {
 	showCart?: boolean;
 };
+
+const linkStyles = cn(
+	"group inline-flex items-center justify-center gap-2",
+	"rounded-md px-4 py-3 text-sm leading-none",
+	"font-medium transition-colors hover:bg-accent",
+	"hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+	"focus:outline-none disabled:pointer-events-none disabled:opacity-50",
+	"data-[active]:bg-accent/50 data-[state=open]:bg-accent/50",
+);
 
 export function Header({ showCart = true }: HeaderProps) {
 	return (
@@ -31,26 +40,19 @@ export function Header({ showCart = true }: HeaderProps) {
 							{AppConfig.name}
 						</span>
 					</Link>
-					<div className="hidden md:flex">
-						<>
+
+					<div className="flex items-center">
+						<Link href="/assistant" className={linkStyles}>
+							<Sparkles className="size-4" />
+							Assistant
+						</Link>
+						<div className="hidden md:block">
 							{links.map((link) => (
-								<a
-									key={link.name}
-									href={link.href}
-									className={cn(
-										"group flex h-10 items-center justify-center gap-2",
-										"rounded-md px-4 py-2 text-sm leading-none",
-										"font-medium transition-colors hover:bg-accent",
-										"hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-										"focus:outline-none disabled:pointer-events-none disabled:opacity-50",
-										"data-[active]:bg-accent/50 data-[state=open]:bg-accent/50",
-									)}
-								>
-									{link.icon && <link.icon className="size-4" />}
+								<Link key={link.name} href={link.href} className={linkStyles}>
 									{link.name}
-								</a>
+								</Link>
 							))}
-						</>
+						</div>
 					</div>
 				</div>
 
