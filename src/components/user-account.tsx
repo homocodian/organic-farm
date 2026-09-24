@@ -1,10 +1,16 @@
 "use client";
+
+import React from "react";
 import Link from "next/link";
 
 import {
 	DropdownMenu,
 	DropdownMenuContent,
+	DropdownMenuGroup,
 	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuRadioGroup,
+	DropdownMenuRadioItem,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -15,6 +21,14 @@ import { Button } from "./ui/button";
 import { useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCartStore } from "@/app/context/cart";
+import { useTheme } from "next-themes";
+import { defaultTheme } from "@/constants/theme";
+
+const options = [
+	{ id: "system", label: "System" },
+	{ id: "light", label: "Light" },
+	{ id: "dark", label: "Dark" },
+];
 
 export function UserAccount() {
 	const session = authClient.useSession();
@@ -23,6 +37,12 @@ export function UserAccount() {
 	const resetCart = useCartStore((state) => state.resetCart);
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
+	const { theme, setTheme } = useTheme();
+	const [mounted, setMounted] = React.useState(false);
+
+	React.useEffect(() => {
+		setMounted(true);
+	}, []);
 
 	if (session.isPending) {
 		return (
@@ -63,6 +83,9 @@ export function UserAccount() {
 							<AvatarImage alt="Picture" src={user.image} />
 							<AvatarFallback>
 								{user.name ? (
+									// get the first letter of the first name and the first letter of the last name
+									// if the name is only one word, just get the first letter of that word
+									// Example: "Kamlesh Kumar" -> "KK", "Aman" -> "A"
 									`${user.name.split(" ")?.[0]?.[0] ?? ""}${
 										user.name.split(" ")?.at(-1)?.[0] ?? ""
 									}`
@@ -99,6 +122,20 @@ export function UserAccount() {
 						<Link href={item.href || "#"}>{item.title}</Link>
 					</DropdownMenuItem>
 				))}
+				<DropdownMenuSeparator />
+				<DropdownMenuGroup>
+					<DropdownMenuLabel>Theme</DropdownMenuLabel>
+					<DropdownMenuRadioGroup
+						value={mounted ? (theme ?? defaultTheme) : defaultTheme}
+						onValueChange={setTheme}
+					>
+						{options.map((option) => (
+							<DropdownMenuRadioItem key={option.id} value={option.id}>
+								{option.label}
+							</DropdownMenuRadioItem>
+						))}
+					</DropdownMenuRadioGroup>
+				</DropdownMenuGroup>
 				<DropdownMenuSeparator />
 				<DropdownMenuItem
 					className="cursor-pointer"
