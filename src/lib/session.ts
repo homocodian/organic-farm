@@ -4,14 +4,13 @@ import { headers } from "next/headers";
 import { auth } from "./auth";
 
 export const getCurrentUser = cache(async () => {
-	console.log("Fetching current user session...");
-	const session = await auth.api.getSession({
-		headers: await headers(),
-	});
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-	if (!session) {
-		return null;
-	}
+  if (!session) {
+    return null;
+  }
 
-	return session.user;
+  return session.user;
 });
