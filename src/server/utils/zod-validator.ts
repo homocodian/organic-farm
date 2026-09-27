@@ -1,19 +1,16 @@
-import { ZodSchema } from "zod";
+import { ZodType, prettifyError } from "zod";
 import type { ValidationTargets } from "hono";
 import { zValidator as zv } from "@hono/zod-validator";
 
 export const zValidator = <
-	T extends ZodSchema,
-	Target extends keyof ValidationTargets
+  T extends ZodType,
+  Target extends keyof ValidationTargets,
 >(
-	target: Target,
-	schema: T
+  target: Target,
+  schema: T,
 ) =>
-	zv(target, schema, (result, c) => {
-		if (!result.success) {
-			return c.json(
-				{ error: Object.values(result.error.flatten().fieldErrors) },
-				400
-			);
-		}
-	});
+  zv(target, schema, (result, c) => {
+    if (!result.success) {
+      return c.json({ error: prettifyError(result.error) }, 400);
+    }
+  });
