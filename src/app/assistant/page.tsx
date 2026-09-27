@@ -1,6 +1,7 @@
-import { Header } from "@/components/header";
-import { ChatInterface } from "./_components/chat-interface";
-import { ChatProvider } from "./_store/chat";
+import { Header } from '@/components/header';
+
+import { ChatInterface } from './_components/chat-interface';
+import { ChatProvider } from './_store/chat';
 
 export default function Home() {
   return (

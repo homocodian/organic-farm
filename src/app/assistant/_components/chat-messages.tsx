@@ -1,9 +1,11 @@
-"use client";
+'use client';
 
-import { useEffect, useRef } from "react";
-import MessageItem from "./message-item";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Message, useChat } from "../_store/chat";
+import { useEffect, useRef } from 'react';
+
+import { Skeleton } from '@/components/ui/skeleton';
+
+import { Message, useChat } from '../_store/chat';
+import MessageItem from './message-item';
 
 interface ChatMessagesProps {
   messages: Message[];
@@ -14,18 +16,18 @@ export function ChatMessages({ messages }: ChatMessagesProps) {
   const isLoading = useChat((s) => s.isLoading);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
   return (
-    <div className="flex flex-col p-4 overflow-y-auto h-full">
+    <div className="flex h-full flex-col overflow-y-auto p-4">
       {messages.map((message) => (
         <MessageItem key={message.id} message={message} />
       ))}
 
       {isLoading && (
         <div className="flex items-start gap-3 py-4">
-          <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center">
+          <div className="bg-primary/10 flex size-8 items-center justify-center rounded-full">
             <span className="text-primary text-sm">AI</span>
           </div>
           <div className="flex-1 space-y-2">

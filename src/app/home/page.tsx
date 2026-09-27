@@ -1,21 +1,22 @@
-import { Header } from "@/components/header";
-import { Hero } from "./_components/hero-section";
-import { Information } from "./_components/info-section";
-import { LearnMore } from "./_components/about-section";
-import { Community } from "./_components/community-section";
-import Footer from "../_components/footer";
+import { Header } from '@/components/header';
+
+import Footer from '../_components/footer';
+import { LearnMore } from './_components/about-section';
+import { Community } from './_components/community-section';
+import { Hero } from './_components/hero-section';
+import { Information } from './_components/info-section';
 
 export default function Home() {
-	return (
-		<div className="flex min-h-screen flex-col">
-			<Header />
-			<main className="flex-1">
-				<Hero />
-				<Information />
-				<LearnMore />
-				<Community />
-			</main>
-			<Footer />
-		</div>
-	);
+  return (
+    <div className="flex min-h-screen flex-col">
+      <Header />
+      <main className="flex-1">
+        <Hero />
+        <Information />
+        <LearnMore />
+        <Community />
+      </main>
+      <Footer />
+    </div>
+  );
 }

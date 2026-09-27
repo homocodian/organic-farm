@@ -1,18 +1,18 @@
 /** Discriminated union tag for the Ok variant */
-const OK = "Ok" as const;
+const OK = 'Ok' as const;
 /** Discriminated union tag for the Err variant */
-const ERR = "Err" as const;
+const ERR = 'Err' as const;
 
 /** Represents a successful outcome holding a value of type T */
 export interface Ok<T> {
-	readonly _tag: typeof OK;
-	readonly value: T;
+  readonly _tag: typeof OK;
+  readonly value: T;
 }
 
 /** Represents a failed outcome holding an error of type E */
 export interface Err<E> {
-	readonly _tag: typeof ERR;
-	readonly error: E;
+  readonly _tag: typeof ERR;
+  readonly error: E;
 }
 
 /** A value that is either Ok<T> (success) or Err<E> (failure) */
@@ -34,11 +34,11 @@ export const err = <E>(error: E): Err<E> => Object.freeze({ _tag: ERR, error });
 
 /** Narrows a Result to its Ok branch */
 export const isOk = <T, E>(result: Result<T, E>): result is Ok<T> =>
-	result._tag === OK;
+  result._tag === OK;
 
 /** Narrows a Result to its Err branch */
 export const isErr = <T, E>(result: Result<T, E>): result is Err<E> =>
-	result._tag === ERR;
+  result._tag === ERR;
 
 // ---------------------------------------------------------------------------
 // 4. Core Transformations
@@ -50,8 +50,8 @@ export const isErr = <T, E>(result: Result<T, E>): result is Err<E> =>
  * @example map(err("oops"), x => x * 3)  // Err("oops")
  */
 export const map = <T, U, E>(
-	result: Result<T, E>,
-	fn: (value: T) => U,
+  result: Result<T, E>,
+  fn: (value: T) => U
 ): Result<U, E> => (isOk(result) ? ok(fn(result.value)) : result);
 
 /**
@@ -59,8 +59,8 @@ export const map = <T, U, E>(
  * @example mapErr(err("oops"), e => new Error(e))  // Err(Error("oops"))
  */
 export const mapErr = <T, E, F>(
-	result: Result<T, E>,
-	fn: (error: E) => F,
+  result: Result<T, E>,
+  fn: (error: E) => F
 ): Result<T, F> => (isErr(result) ? err(fn(result.error)) : result);
 
 /**
@@ -71,8 +71,8 @@ export const mapErr = <T, E, F>(
  * @example flatMap(err("nope"), x => ok(x))  // Err("nope")
  */
 export const flatMap = <T, U, E>(
-	result: Result<T, E>,
-	fn: (value: T) => Result<U, E>,
+  result: Result<T, E>,
+  fn: (value: T) => Result<U, E>
 ): Result<U, E> => (isOk(result) ? fn(result.value) : result);
 
 /** Alias for flatMap — matches Rust / fp-ts naming conventions */
@@ -83,8 +83,8 @@ export const andThen = flatMap;
  * @example orElse(err("bad"), e => ok(`fixed: ${e}`))  // Ok("fixed: bad")
  */
 export const orElse = <T, E, F>(
-	result: Result<T, E>,
-	fn: (error: E) => Result<T, F>,
+  result: Result<T, E>,
+  fn: (error: E) => Result<T, F>
 ): Result<T, F> => (isErr(result) ? fn(result.error) : result);
 
 // ---------------------------------------------------------------------------
@@ -96,18 +96,18 @@ export const orElse = <T, E, F>(
  * @throws The contained error if the result is Err
  */
 export const unwrap = <T, E>(result: Result<T, E>): T => {
-	if (isOk(result)) return result.value;
-	throw result.error instanceof Error
-		? result.error
-		: new Error(`Result.unwrap called on Err: ${String(result.error)}`);
+  if (isOk(result)) return result.value;
+  throw result.error instanceof Error
+    ? result.error
+    : new Error(`Result.unwrap called on Err: ${String(result.error)}`);
 };
 
 /**
  * Unwrap with a custom error message on failure.
  */
 export const expect = <T, E>(result: Result<T, E>, message: string): T => {
-	if (isOk(result)) return result.value;
-	throw new Error(`${message}: ${String(result.error)}`);
+  if (isOk(result)) return result.value;
+  throw new Error(`${message}: ${String(result.error)}`);
 };
 
 /**
@@ -115,15 +115,15 @@ export const expect = <T, E>(result: Result<T, E>, message: string): T => {
  * @example unwrapOr(err("oops"), 42)  // 42
  */
 export const unwrapOr = <T, E>(result: Result<T, E>, defaultValue: T): T =>
-	isOk(result) ? result.value : defaultValue;
+  isOk(result) ? result.value : defaultValue;
 
 /**
  * Return the success value or compute a fallback from the error.
  * @example unwrapOrElse(err("oops"), e => e.length)  // 4
  */
 export const unwrapOrElse = <T, E>(
-	result: Result<T, E>,
-	fn: (error: E) => T,
+  result: Result<T, E>,
+  fn: (error: E) => T
 ): T => (isOk(result) ? result.value : fn(result.error));
 
 /**
@@ -131,15 +131,15 @@ export const unwrapOrElse = <T, E>(
  * Useful for optional chaining: `toOption(result)?.name`
  */
 export const toOption = <T, E>(result: Result<T, E>): T | undefined =>
-	isOk(result) ? result.value : undefined;
+  isOk(result) ? result.value : undefined;
 
 // ---------------------------------------------------------------------------
 // 6. Pattern Matching
 // ---------------------------------------------------------------------------
 
 export interface MatchHandlers<T, E, R> {
-	ok: (value: T) => R;
-	err: (error: E) => R;
+  ok: (value: T) => R;
+  err: (error: E) => R;
 }
 
 /**
@@ -151,21 +151,21 @@ export interface MatchHandlers<T, E, R> {
  * })
  */
 export const match = <T, E, R>(
-	result: Result<T, E>,
-	handlers: MatchHandlers<T, E, R>,
+  result: Result<T, E>,
+  handlers: MatchHandlers<T, E, R>
 ): R => (isOk(result) ? handlers.ok(result.value) : handlers.err(result.error));
 
 /**
  * Async counterpart to `match` for handlers that return promises.
  */
 export const matchAsync = async <T, E, R>(
-	result: Result<T, E>,
-	handlers: {
-		ok: (value: T) => R | Promise<R>;
-		err: (error: E) => R | Promise<R>;
-	},
+  result: Result<T, E>,
+  handlers: {
+    ok: (value: T) => R | Promise<R>;
+    err: (error: E) => R | Promise<R>;
+  }
 ): Promise<R> =>
-	isOk(result) ? handlers.ok(result.value) : handlers.err(result.error);
+  isOk(result) ? handlers.ok(result.value) : handlers.err(result.error);
 
 // ---------------------------------------------------------------------------
 // 7. Collection Utilities
@@ -178,12 +178,12 @@ export const matchAsync = async <T, E, R>(
  * @example all([ok(1), err("oops"), ok(3)]) // Err("oops")
  */
 export const all = <T, E>(results: Result<T, E>[]): Result<T[], E> => {
-	const values: T[] = [];
-	for (const r of results) {
-		if (isErr(r)) return r;
-		values.push(r.value);
-	}
-	return ok(values);
+  const values: T[] = [];
+  for (const r of results) {
+    if (isErr(r)) return r;
+    values.push(r.value);
+  }
+  return ok(values);
 };
 
 /**
@@ -192,15 +192,15 @@ export const all = <T, E>(results: Result<T, E>[]): Result<T[], E> => {
  * // { oks: [1], errs: ["a", "b"] }
  */
 export const allSettled = <T, E>(
-	results: Result<T, E>[],
+  results: Result<T, E>[]
 ): { oks: T[]; errs: E[] } => {
-	const oks: T[] = [];
-	const errs: E[] = [];
-	for (const r of results) {
-		if (isOk(r)) oks.push(r.value);
-		else errs.push(r.error);
-	}
-	return { oks, errs };
+  const oks: T[] = [];
+  const errs: E[] = [];
+  for (const r of results) {
+    if (isOk(r)) oks.push(r.value);
+    else errs.push(r.error);
+  }
+  return { oks, errs };
 };
 
 /**
@@ -209,12 +209,12 @@ export const allSettled = <T, E>(
  * @example any([err("a"), err("b")])      // Err("b")
  */
 export const any = <T, E>(results: Result<T, E>[]): Result<T, E> => {
-	let lastErr: Err<E> | undefined;
-	for (const r of results) {
-		if (isOk(r)) return r;
-		lastErr = r;
-	}
-	return lastErr ?? err(undefined as unknown as E);
+  let lastErr: Err<E> | undefined;
+  for (const r of results) {
+    if (isOk(r)) return r;
+    lastErr = r;
+  }
+  return lastErr ?? err(undefined as unknown as E);
 };
 
 /**
@@ -223,7 +223,7 @@ export const any = <T, E>(results: Result<T, E>[]): Result<T, E> => {
  * // { oks: [1, 2], errs: ["a"] }
  */
 export const partition = <T, E>(
-	results: Result<T, E>[],
+  results: Result<T, E>[]
 ): { oks: T[]; errs: E[] } => allSettled(results);
 
 // ---------------------------------------------------------------------------
@@ -245,17 +245,17 @@ export type AsyncResult<T, E = Error> = Promise<Result<T, E>>;
  * const result = await safeFetch();
  */
 export const tryCatchAsync =
-	<T, E = Error>(
-		fn: () => Promise<T>,
-		onError: (thrown: unknown) => E = (e) => e as E,
-	): (() => AsyncResult<T, E>) =>
-	async () => {
-		try {
-			return ok(await fn());
-		} catch (thrown) {
-			return err(onError(thrown));
-		}
-	};
+  <T, E = Error>(
+    fn: () => Promise<T>,
+    onError: (thrown: unknown) => E = (e) => e as E
+  ): (() => AsyncResult<T, E>) =>
+  async () => {
+    try {
+      return ok(await fn());
+    } catch (thrown) {
+      return err(onError(thrown));
+    }
+  };
 
 /**
  * Wrap a synchronous function so it always returns Result<T, E>
@@ -274,38 +274,38 @@ export const tryCatchAsync =
  * safeParseInt("abc");  // Err(Error)
  */
 export const tryCatch = <T, E = Error>(
-	fn: () => T,
-	onError: (thrown: unknown) => E = (e) => e as E,
+  fn: () => T,
+  onError: (thrown: unknown) => E = (e) => e as E
 ): Result<T, E> => {
-	try {
-		return ok(fn());
-	} catch (thrown) {
-		return err(onError(thrown));
-	}
+  try {
+    return ok(fn());
+  } catch (thrown) {
+    return err(onError(thrown));
+  }
 };
 
 /**
  * Async map — transform the success value of an AsyncResult.
  */
 export const mapAsync = async <T, U, E>(
-	result: AsyncResult<T, E>,
-	fn: (value: T) => Promise<U> | U,
+  result: AsyncResult<T, E>,
+  fn: (value: T) => Promise<U> | U
 ): AsyncResult<U, E> => {
-	const r = await result;
-	if (isErr(r)) return r;
-	return ok(await fn(r.value));
+  const r = await result;
+  if (isErr(r)) return r;
+  return ok(await fn(r.value));
 };
 
 /**
  * Async flatMap — chain AsyncResults.
  */
 export const flatMapAsync = async <T, U, E>(
-	result: AsyncResult<T, E>,
-	fn: (value: T) => AsyncResult<U, E>,
+  result: AsyncResult<T, E>,
+  fn: (value: T) => AsyncResult<U, E>
 ): AsyncResult<U, E> => {
-	const r = await result;
-	if (isErr(r)) return r;
-	return fn(r.value);
+  const r = await result;
+  if (isErr(r)) return r;
+  return fn(r.value);
 };
 
 // ---------------------------------------------------------------------------
@@ -314,22 +314,21 @@ export const flatMapAsync = async <T, U, E>(
 
 /** Serialized form of a Result for storage / transport */
 export type SerializedResult<T, E> =
-	| { ok: true; value: T }
-	| { ok: false; error: E };
+  { ok: true; value: T } | { ok: false; error: E };
 
 /** Serialize a Result to a plain object safe for JSON.stringify */
 export const serialize = <T, E>(
-	result: Result<T, E>,
+  result: Result<T, E>
 ): SerializedResult<T, E> =>
-	isOk(result)
-		? { ok: true, value: result.value }
-		: { ok: false, error: result.error };
+  isOk(result)
+    ? { ok: true, value: result.value }
+    : { ok: false, error: result.error };
 
 /** Deserialize a plain object back into a Result */
 export const deserialize = <T, E>(
-	serialized: SerializedResult<T, E>,
+  serialized: SerializedResult<T, E>
 ): Result<T, E> =>
-	serialized.ok ? ok(serialized.value) : err(serialized.error);
+  serialized.ok ? ok(serialized.value) : err(serialized.error);
 
 // ---------------------------------------------------------------------------
 // 10. Object / Record Utilities
@@ -344,15 +343,15 @@ export const deserialize = <T, E>(
  * // Ok({ name: "Alice", age: 30 })
  */
 export const allRecord = <T extends Record<string, unknown>, E>(record: {
-	[K in keyof T]: Result<T[K], E>;
+  [K in keyof T]: Result<T[K], E>;
 }): Result<T, E> => {
-	const out = {} as T;
-	for (const key of Object.keys(record) as (keyof T)[]) {
-		const r = record[key];
-		if (isErr(r)) return r;
-		out[key] = r.value;
-	}
-	return ok(out);
+  const out = {} as T;
+  for (const key of Object.keys(record) as (keyof T)[]) {
+    const r = record[key];
+    if (isErr(r)) return r;
+    out[key] = r.value;
+  }
+  return ok(out);
 };
 
 // ---------------------------------------------------------------------------
@@ -370,71 +369,71 @@ export const allRecord = <T extends Record<string, unknown>, E>(record: {
  *   .match({ ok: v => `value: ${v}`, err: e => `error: ${e}` });
  */
 export class ResultBuilder<T, E> {
-	private constructor(private readonly _result: Result<T, E>) {}
+  private constructor(private readonly _result: Result<T, E>) {}
 
-	static of<T, E>(result: Result<T, E>): ResultBuilder<T, E> {
-		return new ResultBuilder(result);
-	}
+  static of<T, E>(result: Result<T, E>): ResultBuilder<T, E> {
+    return new ResultBuilder(result);
+  }
 
-	static ok<T>(value: T): ResultBuilder<T, never> {
-		return new ResultBuilder(ok(value));
-	}
+  static ok<T>(value: T): ResultBuilder<T, never> {
+    return new ResultBuilder(ok(value));
+  }
 
-	static err<E>(error: E): ResultBuilder<never, E> {
-		return new ResultBuilder(err(error));
-	}
+  static err<E>(error: E): ResultBuilder<never, E> {
+    return new ResultBuilder(err(error));
+  }
 
-	map<U>(fn: (value: T) => U): ResultBuilder<U, E> {
-		return ResultBuilder.of(map(this._result, fn));
-	}
+  map<U>(fn: (value: T) => U): ResultBuilder<U, E> {
+    return ResultBuilder.of(map(this._result, fn));
+  }
 
-	mapErr<F>(fn: (error: E) => F): ResultBuilder<T, F> {
-		return ResultBuilder.of(mapErr(this._result, fn));
-	}
+  mapErr<F>(fn: (error: E) => F): ResultBuilder<T, F> {
+    return ResultBuilder.of(mapErr(this._result, fn));
+  }
 
-	flatMap<U>(fn: (value: T) => Result<U, E>): ResultBuilder<U, E> {
-		return ResultBuilder.of(flatMap(this._result, fn));
-	}
+  flatMap<U>(fn: (value: T) => Result<U, E>): ResultBuilder<U, E> {
+    return ResultBuilder.of(flatMap(this._result, fn));
+  }
 
-	orElse<F>(fn: (error: E) => Result<T, F>): ResultBuilder<T, F> {
-		return ResultBuilder.of(orElse(this._result, fn));
-	}
+  orElse<F>(fn: (error: E) => Result<T, F>): ResultBuilder<T, F> {
+    return ResultBuilder.of(orElse(this._result, fn));
+  }
 
-	match<R>(handlers: MatchHandlers<T, E, R>): R {
-		return match(this._result, handlers);
-	}
+  match<R>(handlers: MatchHandlers<T, E, R>): R {
+    return match(this._result, handlers);
+  }
 
-	unwrap(): T {
-		return unwrap(this._result);
-	}
+  unwrap(): T {
+    return unwrap(this._result);
+  }
 
-	unwrapOr(defaultValue: T): T {
-		return unwrapOr(this._result, defaultValue);
-	}
+  unwrapOr(defaultValue: T): T {
+    return unwrapOr(this._result, defaultValue);
+  }
 
-	unwrapOrElse(fn: (error: E) => T): T {
-		return unwrapOrElse(this._result, fn);
-	}
+  unwrapOrElse(fn: (error: E) => T): T {
+    return unwrapOrElse(this._result, fn);
+  }
 
-	toOption(): T | undefined {
-		return toOption(this._result);
-	}
+  toOption(): T | undefined {
+    return toOption(this._result);
+  }
 
-	serialize(): SerializedResult<T, E> {
-		return serialize(this._result);
-	}
+  serialize(): SerializedResult<T, E> {
+    return serialize(this._result);
+  }
 
-	get result(): Result<T, E> {
-		return this._result;
-	}
+  get result(): Result<T, E> {
+    return this._result;
+  }
 
-	get isOk(): boolean {
-		return isOk(this._result);
-	}
+  get isOk(): boolean {
+    return isOk(this._result);
+  }
 
-	get isErr(): boolean {
-		return isErr(this._result);
-	}
+  get isErr(): boolean {
+    return isErr(this._result);
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -455,8 +454,8 @@ export type ValidationError = { field: string; message: string };
  * // Err([{ field: "name", message: "required" }, ...])
  */
 export const validate = <T>(
-	results: Result<T, ValidationError>[],
+  results: Result<T, ValidationError>[]
 ): Result<T[], ValidationError[]> => {
-	const { oks, errs } = allSettled(results);
-	return errs.length > 0 ? err(errs) : ok(oks);
+  const { oks, errs } = allSettled(results);
+  return errs.length > 0 ? err(errs) : ok(oks);
 };

@@ -1,31 +1,33 @@
-"use client";
+'use client';
 
-import { useFormStatus } from "react-dom";
-import { Loader2 } from "lucide-react";
+import { useFormStatus } from 'react-dom';
 
-import { Button, ButtonProps } from "./ui/button";
-import { cn } from "@/lib/utils";
+import { Loader2 } from 'lucide-react';
+
+import { cn } from '@/lib/utils';
+
+import { Button, ButtonProps } from './ui/button';
 
 interface SubmitButtonProps extends ButtonProps {
-	children: React.ReactNode;
+  children: React.ReactNode;
 }
 
 export function SubmitButton({
-	className,
-	disabled,
-	children,
-	...props
+  className,
+  disabled,
+  children,
+  ...props
 }: SubmitButtonProps) {
-	const { pending } = useFormStatus();
-	return (
-		<Button
-			{...props}
-			type="submit"
-			className={cn("w-full", className)}
-			disabled={pending || disabled}
-		>
-			{pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-			{children}
-		</Button>
-	);
+  const { pending } = useFormStatus();
+  return (
+    <Button
+      {...props}
+      type="submit"
+      className={cn('w-full', className)}
+      disabled={pending || disabled}
+    >
+      {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+      {children}
+    </Button>
+  );
 }

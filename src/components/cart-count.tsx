@@ -1,25 +1,28 @@
-"use client";
+'use client';
 
-import { Badge } from "./ui/badge";
-import { useCartStore } from "@/app/context/cart";
-import React from "react";
+import React from 'react';
+
+import { useCartStore } from '@/app/context/cart';
+
+import { Badge } from './ui/badge';
 
 export function CartCount() {
-	const getCartCount = useCartStore((state) => state.getCartCount);
-	const [count, setCount] = React.useState<number | null>(() => getCartCount());
-	const cart = useCartStore((state) => state.cart);
+  const getCartCount = useCartStore((state) => state.getCartCount);
+  const [count, setCount] = React.useState<number | null>(() => getCartCount());
+  const cart = useCartStore((state) => state.cart);
 
-	React.useEffect(() => {
-		setCount(getCartCount());
-	}, [cart, getCartCount]);
+  React.useEffect(() => {
+    // eslint-disable-next-line
+    setCount(getCartCount());
+  }, [cart, getCartCount]);
 
-	if (count === null || count <= 0) {
-		return null;
-	}
+  if (count === null || count <= 0) {
+    return null;
+  }
 
-	return (
-		<Badge className="absolute -right-2 -top-2 h-5 w-5 rounded-full p-0 flex items-center justify-center">
-			{count}
-		</Badge>
-	);
+  return (
+    <Badge className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full p-0">
+      {count}
+    </Badge>
+  );
 }

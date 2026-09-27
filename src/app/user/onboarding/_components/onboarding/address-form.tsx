@@ -1,11 +1,14 @@
-import { OnboardingSchema, onboardingSchema } from "@/lib/schema/onboarding";
-import { useAddressForm } from "./address/form";
-import { useOnboardingStore } from "@/lib/store/onboarding";
-import { Button } from "@/components/ui/button";
-import { api } from "@/lib/api";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import type { z } from "zod";
+import type { z } from 'zod';
+
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+
+import { Button } from '@/components/ui/button';
+import { api } from '@/lib/api';
+import { OnboardingSchema, onboardingSchema } from '@/lib/schema/onboarding';
+import { useOnboardingStore } from '@/lib/store/onboarding';
+
+import { useAddressForm } from './address/form';
 
 const addressFormSchema = onboardingSchema.pick({
   state: true,
@@ -14,7 +17,7 @@ const addressFormSchema = onboardingSchema.pick({
   pinCode: true,
   addressPhone: true,
   addressAlternatePhone: true,
-  landmark: true,
+  landmark: true
 });
 
 export type AddressFormSchema = z.infer<typeof addressFormSchema>;
@@ -24,35 +27,35 @@ export function AddressForm() {
 
   const form = useAddressForm({
     defaultValues: {
-      city: "",
-      state: "",
-      street: "",
-      pinCode: "" as unknown as number,
-      addressPhone: "",
-      addressAlternatePhone: "",
-      landmark: "",
+      city: '',
+      state: '',
+      street: '',
+      pinCode: '' as unknown as number,
+      addressPhone: '',
+      addressAlternatePhone: '',
+      landmark: ''
     } as AddressFormSchema,
     validators: {
-      onSubmit: addressFormSchema,
+      onSubmit: addressFormSchema
     },
     onSubmit: async (values) => {
       // Handle form submission here
       console.log({
         ...useOnboardingStore.getState().getValues(),
-        ...values.value,
+        ...values.value
       });
 
       const res = await api.user.onboarding.$post({
         json: {
           ...useOnboardingStore.getState().getValues(),
-          ...values.value,
-        } as OnboardingSchema,
+          ...values.value
+        } as OnboardingSchema
       });
 
       if (!res.ok) {
         const { error } = (await res.json()) as { error: string | string[] };
 
-        if (typeof error === "string") {
+        if (typeof error === 'string') {
           toast.error(error);
         } else {
           error.forEach((err) => {
@@ -63,8 +66,8 @@ export function AddressForm() {
         return;
       }
       useOnboardingStore.persist.clearStorage();
-      router.replace("/");
-    },
+      router.replace('/');
+    }
   });
 
   const setCurrentStep = useOnboardingStore((state) => state.setCurrentStep);

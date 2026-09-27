@@ -1,15 +1,17 @@
-import { links } from "@/constants/links";
-import { Button, buttonVariants } from "./ui/button";
+import { Menu } from 'lucide-react';
+import Link from 'next/link';
+
+import { links } from '@/constants/links';
+
+import { Button, buttonVariants } from './ui/button';
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
-} from "./ui/sheet";
-import Link from "next/link";
-import { Menu } from "lucide-react";
+  SheetTrigger
+} from './ui/sheet';
 
 export function HeaderMobileMenu() {
   return (
@@ -31,7 +33,7 @@ export function HeaderMobileMenu() {
             <Link
               href={link.href}
               key={link.name}
-              className={buttonVariants({ variant: "link" })}
+              className={buttonVariants({ variant: 'link' })}
             >
               {link.name}
             </Link>

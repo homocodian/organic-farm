@@ -1,14 +1,15 @@
-"use client";
+'use client';
 
-import { createContext, useContext, useRef } from "react";
-import { createStore, useStore } from "zustand";
+import React from 'react';
+
+import { createStore, useStore } from 'zustand';
 
 export interface Message {
   content: string;
-  role: "user" | "assistant";
+  role: 'user' | 'assistant';
   files?: File[];
   id: string;
-  status?: "error" | "pending" | "success";
+  status?: 'error' | 'pending' | 'success';
 }
 
 interface ChatProps {
@@ -19,7 +20,7 @@ interface ChatProps {
 
 interface ChatState extends ChatProps {
   setMessages: (messages: Message[]) => void;
-  addMessage: (message: Omit<Message, "id">) => Message;
+  addMessage: (message: Omit<Message, 'id'>) => Message;
   appendMessageToChat: (message: string) => void;
 
   setIsStreaming: (state: boolean) => void;
@@ -33,13 +34,13 @@ const createChatStore = (initProps?: Partial<ChatProps>) => {
     messages: [
       {
         id: crypto.randomUUID(),
-        role: "assistant",
+        role: 'assistant',
         content: `Hello! How can I help you today?\n\nनमस्ते! मैं आपकी आज किस तरह मदद कर सकता हूँ?`,
-        files: [],
-      },
+        files: []
+      }
     ],
     isLoading: false,
-    isStreaming: false,
+    isStreaming: false
   };
 
   return createStore<ChatState>()((set) => ({
@@ -62,46 +63,38 @@ const createChatStore = (initProps?: Partial<ChatProps>) => {
         return {
           messages: [
             ...state.messages.slice(0, -1),
-            { ...latestMessage, content: latestMessage.content + message },
-          ],
+            { ...latestMessage, content: latestMessage.content + message }
+          ]
         };
       });
     },
 
     setIsLoading: (state) => {
       set(() => ({
-        isLoading: state,
+        isLoading: state
       }));
     },
 
     setIsStreaming: (state) => {
       set(() => ({
-        isStreaming: state,
+        isStreaming: state
       }));
-    },
+    }
   }));
 };
 
-const ChatContext = createContext<ChatStore | null>(null);
+const ChatContext = React.createContext<ChatStore | null>(null);
 
 type ChatProviderProps = React.PropsWithChildren<Partial<ChatProps>>;
 
 export function ChatProvider({ children, ...props }: ChatProviderProps) {
-  const storeRef = useRef<ChatStore>(null);
+  const [store] = React.useState(() => createChatStore(props));
 
-  if (!storeRef.current) {
-    storeRef.current = createChatStore(props);
-  }
-
-  return (
-    <ChatContext.Provider value={storeRef.current}>
-      {children}
-    </ChatContext.Provider>
-  );
+  return <ChatContext.Provider value={store}>{children}</ChatContext.Provider>;
 }
 
 export function useChat<T>(selector: (state: ChatState) => T): T {
-  const store = useContext(ChatContext);
-  if (!store) throw new Error("Missing ChatContext.Provider in the tree");
+  const store = React.useContext(ChatContext);
+  if (!store) throw new Error('Missing ChatContext.Provider in the tree');
   return useStore(store, selector);
 }

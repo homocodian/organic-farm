@@ -1,114 +1,116 @@
+import type { z } from 'zod';
+
 import {
   index,
   pgEnum,
   pgTable,
   real,
   text,
-  uuid,
   timestamp,
-} from "drizzle-orm/pg-core";
-import { user } from "./user";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import type { z } from "zod";
+  uuid
+} from 'drizzle-orm/pg-core';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
-export const productCategory = pgEnum("product_category", [
-  "Machinery",
-  "Vegetable",
-  "Cereal",
-  "Millets",
-  "Pulses",
-  "Fruits",
-  "Sugar crops",
-  "Fibre crops",
-  "Flower crops",
-  "Narcotics",
-  "Medicinal & aromatic plants",
-  "Leaves",
-  "Milk products",
-  "Dairy Products",
-  "Meat products",
-  "Fish products",
-  "Egg products",
-  "Animal feed",
-  "Animal products",
-  "Contract",
-  "Livestock",
-  "Fertilizer",
-  "Irrigation",
-  "Others",
+import { user } from './user';
+
+export const productCategory = pgEnum('product_category', [
+  'Machinery',
+  'Vegetable',
+  'Cereal',
+  'Millets',
+  'Pulses',
+  'Fruits',
+  'Sugar crops',
+  'Fibre crops',
+  'Flower crops',
+  'Narcotics',
+  'Medicinal & aromatic plants',
+  'Leaves',
+  'Milk products',
+  'Dairy Products',
+  'Meat products',
+  'Fish products',
+  'Egg products',
+  'Animal feed',
+  'Animal products',
+  'Contract',
+  'Livestock',
+  'Fertilizer',
+  'Irrigation',
+  'Others'
 ]);
 
 export const productCategories = productCategory.enumValues;
 
-export const productType = pgEnum("product_type", [
-  "Purchasable",
-  "Rentable",
-  "Contract",
-  "Biddable",
+export const productType = pgEnum('product_type', [
+  'Purchasable',
+  'Rentable',
+  'Contract',
+  'Biddable'
 ]);
 
 export const productTypes = productType.enumValues;
 
-export const quantityType = pgEnum("product_quantity_type", [
-  "Kg",
-  "Quintal",
-  "Hour",
-  "Litre",
-  "Piece",
-  "Packet",
-  "Bundle",
-  "Box",
-  "Carton",
-  "Sets",
-  "Pair",
-  "Dozen",
-  "acre",
-  "Metre",
-  "Pack",
-  "Day",
-  "Unit",
+export const quantityType = pgEnum('product_quantity_type', [
+  'Kg',
+  'Quintal',
+  'Hour',
+  'Litre',
+  'Piece',
+  'Packet',
+  'Bundle',
+  'Box',
+  'Carton',
+  'Sets',
+  'Pair',
+  'Dozen',
+  'acre',
+  'Metre',
+  'Pack',
+  'Day',
+  'Unit'
 ]);
 
 export const quantityTypes = quantityType.enumValues;
 
 export const product = pgTable(
-  "product",
+  'product',
   {
-    id: uuid("id").notNull().primaryKey().defaultRandom(),
-    name: text("name").notNull(),
-    description: text("description").notNull(),
-    category: productCategory("category").notNull(),
-    quantityType: quantityType("quantity_type"),
-    amount: real("amount").notNull(),
-    type: productType("type").notNull(),
-    imageUrl: text("image_url"),
+    id: uuid('id').notNull().primaryKey().defaultRandom(),
+    name: text('name').notNull(),
+    description: text('description').notNull(),
+    category: productCategory('category').notNull(),
+    quantityType: quantityType('quantity_type'),
+    amount: real('amount').notNull(),
+    type: productType('type').notNull(),
+    imageUrl: text('image_url'),
 
-    userId: text("user_id")
+    userId: text('user_id')
       .notNull()
-      .references(() => user.id, { onDelete: "cascade" }),
-    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" })
+      .references(() => user.id, { onDelete: 'cascade' }),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'date' })
       .defaultNow()
       .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true, mode: "date" })
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'date' })
       .notNull()
       .defaultNow()
-      .$onUpdate(() => new Date()),
+      .$onUpdate(() => new Date())
   },
-  (t) => [index("product_user_idx").on(t.userId)],
+  (t) => [index('product_user_idx').on(t.userId)]
 );
 
 export const productInsertSchema = createInsertSchema(product).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
-  userId: true,
+  userId: true
 });
 
 export type ProductInsertSchema = z.infer<typeof productInsertSchema>;
 
 export const productSelectSchema = createSelectSchema(product);
 export type Product = z.infer<typeof productSelectSchema>;
-export type RawProduct = Omit<Product, "createdAt" | "updatedAt"> & {
+export type RawProduct = Omit<Product, 'createdAt' | 'updatedAt'> & {
   createdAt: string;
   updatedAt: string;
 };

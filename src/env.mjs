@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 /**
  * Specify your server-side environment variables schema here. This way you can
@@ -11,7 +11,7 @@ const server = z.object({
   GOOGLE_CLIENT_ID: z.string().min(1),
   GOOGLE_CLIENT_SECRET: z.string().min(1),
   BETTER_AUTH_URL: z.string().min(1),
-  BETTER_AUTH_SECRET: z.string().min(1),
+  BETTER_AUTH_SECRET: z.string().min(1)
 });
 
 /**
@@ -21,7 +21,7 @@ const server = z.object({
  */
 const client = z.object({
   NEXT_PUBLIC_RAZORPAY_KEY_ID: z.string().min(1),
-  NODE_ENV: z.string().min(1),
+  NODE_ENV: z.string().min(1)
 });
 
 /**
@@ -42,7 +42,7 @@ const processEnv = {
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
   BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
   BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
-  NODE_ENV: process.env.NODE_ENV,
+  NODE_ENV: process.env.NODE_ENV
 };
 
 // Don't touch the part below
@@ -50,7 +50,7 @@ const processEnv = {
 
 const merged = z.object({
   ...server.shape,
-  ...client.shape,
+  ...client.shape
 });
 
 /**
@@ -59,7 +59,7 @@ const merged = z.object({
 let env = process.env;
 
 if (!!process.env.SKIP_ENV_VALIDATION === false) {
-  const isServer = typeof window === "undefined";
+  const isServer = typeof window === 'undefined';
 
   const parsed = isServer
     ? merged.safeParse(processEnv) // on server we can validate all env vars
@@ -67,10 +67,10 @@ if (!!process.env.SKIP_ENV_VALIDATION === false) {
 
   if (parsed.success === false) {
     console.error(
-      "❌ Invalid environment variables:",
-      z.treeifyError(parsed.error).errors,
+      '❌ Invalid environment variables:',
+      z.treeifyError(parsed.error).errors
     );
-    throw new Error("Invalid environment variables");
+    throw new Error('Invalid environment variables');
   }
 
   /**
@@ -78,17 +78,17 @@ if (!!process.env.SKIP_ENV_VALIDATION === false) {
    */
   env = new Proxy(parsed.data, {
     get(target, prop) {
-      if (typeof prop !== "string") return undefined;
+      if (typeof prop !== 'string') return undefined;
       // Throw a descriptive error if a server-side env var is accessed on the client
       // Otherwise it would just be returning `undefined` and be annoying to debug
-      if (!isServer && !prop.startsWith("NEXT_PUBLIC_"))
+      if (!isServer && !prop.startsWith('NEXT_PUBLIC_'))
         throw new Error(
-          process.env.NODE_ENV === "production"
-            ? "❌ Attempted to access a server-side environment variable on the client"
-            : `❌ Attempted to access server-side environment variable '${prop}' on the client`,
+          process.env.NODE_ENV === 'production'
+            ? '❌ Attempted to access a server-side environment variable on the client'
+            : `❌ Attempted to access server-side environment variable '${prop}' on the client`
         );
       return target[prop];
-    },
+    }
   });
 }
 

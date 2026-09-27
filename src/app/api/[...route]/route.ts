@@ -1,28 +1,29 @@
-import { AppConfig } from "@/lib/app-config";
-import { auth } from "@/lib/auth";
-import { chat } from "@/server/route/chat";
-import { product } from "@/server/route/product";
-import { user } from "@/server/route/user";
-import { payment } from "@/server/route/payment";
-import { Hono } from "hono";
-import { handle } from "hono/vercel";
-import { env } from "@/env.mjs";
+import { Hono } from 'hono';
+import { handle } from 'hono/vercel';
 
-export const runtime = "nodejs";
+import { env } from '@/env.mjs';
+import { AppConfig } from '@/lib/app-config';
+import { auth } from '@/lib/auth';
+import { chat } from '@/server/route/chat';
+import { payment } from '@/server/route/payment';
+import { product } from '@/server/route/product';
+import { user } from '@/server/route/user';
+
+export const runtime = 'nodejs';
 
 const app = new Hono()
-  .basePath("/api")
-  .get("/info", (c) => {
+  .basePath('/api')
+  .get('/info', (c) => {
     return c.json({
-      message: `${AppConfig.name} is running on ${env.NODE_ENV} environment`,
+      message: `${AppConfig.name} is running on ${env.NODE_ENV} environment`
     });
   })
-  .route("/user", user)
-  .route("/products", product)
-  .route("/payment", payment)
-  .route("/chat", chat);
+  .route('/user', user)
+  .route('/products', product)
+  .route('/payment', payment)
+  .route('/chat', chat);
 
-app.on(["POST", "GET"], "/auth/*", (c) => {
+app.on(['POST', 'GET'], '/auth/*', (c) => {
   return auth.handler(c.req.raw);
 });
 

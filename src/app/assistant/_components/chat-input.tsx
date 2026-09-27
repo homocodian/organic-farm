@@ -1,15 +1,17 @@
-"use client";
+'use client';
 
-import { cn } from "@/lib/utils";
+import { useRef, useState } from 'react';
 
-import type React from "react";
+import type React from 'react';
 
-import { useState, useRef } from "react";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { PaperclipIcon, SendIcon, StopCircleIcon, XIcon } from "lucide-react";
-import { FilePreview } from "./file-preview";
-import { useChat } from "../_store/chat";
+import { PaperclipIcon, SendIcon, StopCircleIcon, XIcon } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { cn } from '@/lib/utils';
+
+import { useChat } from '../_store/chat';
+import { FilePreview } from './file-preview';
 
 interface ChatInputProps {
   onSendMessageAction: (content: string, files?: File[]) => void;
@@ -18,9 +20,9 @@ interface ChatInputProps {
 
 export function ChatInput({
   onSendMessageAction,
-  stopStreamingAction: stopStreaming,
+  stopStreamingAction: stopStreaming
 }: ChatInputProps) {
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
   const [files, setFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -31,13 +33,13 @@ export function ChatInput({
 
     if (message.trim() || files.length > 0) {
       onSendMessageAction(message, files.length > 0 ? files : undefined);
-      setMessage("");
+      setMessage('');
       setFiles([]);
     }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
+    if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSubmit(e);
     }
@@ -53,22 +55,22 @@ export function ChatInput({
   const removeFile = (index: number) => {
     setFiles((prev) => prev.filter((_, i) => i !== index));
     if (fileInputRef.current) {
-      fileInputRef.current.value = "";
+      fileInputRef.current.value = '';
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="relative">
       {files.length > 0 && (
-        <div className="flex flex-wrap gap-2 p-2 border rounded-t-lg">
+        <div className="flex flex-wrap gap-2 rounded-t-lg border p-2">
           {files.map((file, index) => (
-            <div key={index} className="relative group">
+            <div key={index} className="group relative">
               <FilePreview file={file} small />
               <Button
                 type="button"
                 size="icon"
                 variant="destructive"
-                className="absolute -top-2 -right-2 size-5 opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute -top-2 -right-2 size-5 opacity-0 transition-opacity group-hover:opacity-100"
                 onClick={() => removeFile(index)}
               >
                 <XIcon className="size-3" />
@@ -80,8 +82,8 @@ export function ChatInput({
 
       <div
         className={cn(
-          "flex items-end gap-2 border rounded-lg p-2",
-          files.length > 0 && "rounded-t-none border-t-0",
+          'flex items-end gap-2 rounded-lg border p-2',
+          files.length > 0 && 'rounded-t-none border-t-0'
         )}
       >
         <Button
@@ -108,7 +110,7 @@ export function ChatInput({
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Type a message..."
-          className="min-h-5 resize-none border-0 focus-visible:ring-0 flex-1 shadow-none bg-transparent focus-visible:ring-transparent focus-visible:outline-none"
+          className="min-h-5 flex-1 resize-none border-0 bg-transparent shadow-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:outline-none"
           rows={1}
         />
 

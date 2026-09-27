@@ -1,173 +1,175 @@
-import { EyeIcon, EyeOff, Loader2 } from "lucide-react";
+import React from 'react';
 
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { AppConfig } from "@/lib/app-config";
-import { Google } from "./auth/continue-with-google";
-import React from "react";
+import { EyeIcon, EyeOff, Loader2 } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { AppConfig } from '@/lib/app-config';
+import { cn } from '@/lib/utils';
+
+import { Google } from './auth/continue-with-google';
 
 type LoginFormState = {
-	previousState?: {
-		email?: string;
-		password?: string;
-	};
-	errors: string[];
+  previousState?: {
+    email?: string;
+    password?: string;
+  };
+  errors: string[];
 };
 
 interface LoginFormProps {
-	action?: React.FormHTMLAttributes<HTMLFormElement>["action"];
-	shouldShowForgotPassword?: boolean;
-	subHeader: React.ReactNode;
-	submitButtonText: string;
-	className?: string;
-	loading?: boolean;
-	startExtraFields?: React.ReactNode[];
-	endExtraFields?: React.ReactNode[];
-	loginFormState?: LoginFormState;
+  action?: React.FormHTMLAttributes<HTMLFormElement>['action'];
+  shouldShowForgotPassword?: boolean;
+  subHeader: React.ReactNode;
+  submitButtonText: string;
+  className?: string;
+  loading?: boolean;
+  startExtraFields?: React.ReactNode[];
+  endExtraFields?: React.ReactNode[];
+  loginFormState?: LoginFormState;
 }
 
 export function LoginForm({
-	className,
-	action,
-	shouldShowForgotPassword = false,
-	subHeader,
-	submitButtonText = "Login",
-	loading = false,
-	loginFormState,
-	startExtraFields = [],
-	endExtraFields = [],
+  className,
+  action,
+  shouldShowForgotPassword = false,
+  subHeader,
+  submitButtonText = 'Login',
+  loading = false,
+  loginFormState,
+  startExtraFields = [],
+  endExtraFields = []
 }: LoginFormProps) {
-	return (
-		<div className={cn("flex flex-col gap-6", className)}>
-			<div className="flex flex-col gap-6">
-				<div className="flex flex-col items-center gap-2">
-					<a href="#" className="flex flex-col items-center gap-2 font-medium">
-						<div className="flex size-8 items-center justify-center rounded-md">
-							<AppConfig.logo className="size-8" />
-						</div>
-						<span className="sr-only">{AppConfig.name}</span>
-					</a>
-					<h1 className="text-xl font-bold">Welcome to {AppConfig.name}.</h1>
-					{subHeader ? subHeader : null}
-				</div>
-				<form action={action} className="flex flex-col gap-6">
-					{startExtraFields.map((field) => field)}
-					<TextField
-						name="email"
-						type="email"
-						placeholder="m@example.com"
-						required
-						label="Email"
-						id="email"
-						defaultValue={loginFormState?.previousState?.email}
-					/>
-					<PasswordField
-						shouldShowForgotPassword={shouldShowForgotPassword}
-						label="Password"
-						name="password"
-						id="password"
-						required
-						placeholder="********"
-					/>
-					{endExtraFields.map((field) => field)}
-					{loginFormState?.errors.length ? (
-						<div className="rounded-md border border-destructive bg-destructive/10 p-4 text-destructive">
-							{loginFormState.errors.map((error) => (
-								<div className="flex items-center gap-2" key={error}>
-									<span
-										className="h-4 w-4 flex-shrink-0 flex items-center justify-center"
-										aria-hidden="true"
-									>
-										•
-									</span>
-									<span className="text-sm font-medium">{error}</span>
-								</div>
-							))}
-						</div>
-					) : null}
-					<Button type="submit" className="w-full" disabled={loading}>
-						{loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-						{submitButtonText}
-					</Button>
-				</form>
-				<div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
-					<span className="bg-background text-muted-foreground relative z-10 px-2">
-						Or
-					</span>
-				</div>
-				<Google />
-			</div>
-			<div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-				By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-				and <a href="#">Privacy Policy</a>.
-			</div>
-		</div>
-	);
+  return (
+    <div className={cn('flex flex-col gap-6', className)}>
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col items-center gap-2">
+          <a href="#" className="flex flex-col items-center gap-2 font-medium">
+            <div className="flex size-8 items-center justify-center rounded-md">
+              <AppConfig.logo className="size-8" />
+            </div>
+            <span className="sr-only">{AppConfig.name}</span>
+          </a>
+          <h1 className="text-xl font-bold">Welcome to {AppConfig.name}.</h1>
+          {subHeader ? subHeader : null}
+        </div>
+        <form action={action} className="flex flex-col gap-6">
+          {startExtraFields.map((field) => field)}
+          <TextField
+            name="email"
+            type="email"
+            placeholder="m@example.com"
+            required
+            label="Email"
+            id="email"
+            defaultValue={loginFormState?.previousState?.email}
+          />
+          <PasswordField
+            shouldShowForgotPassword={shouldShowForgotPassword}
+            label="Password"
+            name="password"
+            id="password"
+            required
+            placeholder="********"
+          />
+          {endExtraFields.map((field) => field)}
+          {loginFormState?.errors.length ? (
+            <div className="border-destructive bg-destructive/10 text-destructive rounded-md border p-4">
+              {loginFormState.errors.map((error) => (
+                <div className="flex items-center gap-2" key={error}>
+                  <span
+                    className="flex h-4 w-4 flex-shrink-0 items-center justify-center"
+                    aria-hidden="true"
+                  >
+                    •
+                  </span>
+                  <span className="text-sm font-medium">{error}</span>
+                </div>
+              ))}
+            </div>
+          ) : null}
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {submitButtonText}
+          </Button>
+        </form>
+        <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
+          <span className="bg-background text-muted-foreground relative z-10 px-2">
+            Or
+          </span>
+        </div>
+        <Google />
+      </div>
+      <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
+        By clicking continue, you agree to our <a href="#">Terms of Service</a>{' '}
+        and <a href="#">Privacy Policy</a>.
+      </div>
+    </div>
+  );
 }
 
 interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
-	label: string;
+  label: string;
 }
 
 function TextField({ label, ...props }: TextFieldProps) {
-	return (
-		<div className="grid gap-2">
-			<Label htmlFor={props.id}>{label}</Label>
-			<Input {...props} />
-		</div>
-	);
+  return (
+    <div className="grid gap-2">
+      <Label htmlFor={props.id}>{label}</Label>
+      <Input {...props} />
+    </div>
+  );
 }
 
 interface PasswordFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
-	shouldShowForgotPassword?: boolean;
-	label: string;
-	name: string;
+  shouldShowForgotPassword?: boolean;
+  label: string;
+  name: string;
 }
 
 function PasswordField({
-	shouldShowForgotPassword = false,
-	label,
-	name,
-	...props
+  shouldShowForgotPassword = false,
+  label,
+  name,
+  ...props
 }: PasswordFieldProps) {
-	const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
-	const inputRef = React.useRef<HTMLInputElement>(null);
-	return (
-		<div className="grid gap-2">
-			<div className="flex items-center">
-				<Label htmlFor={props.id}>{label}</Label>
-				{shouldShowForgotPassword && (
-					<a
-						href="#"
-						className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-					>
-						Forgot your password?
-					</a>
-				)}
-			</div>
-			<Input
-				name={name}
-				{...props}
-				type={isPasswordVisible ? "text" : "password"}
-				ref={inputRef}
-				trailingComponent={
-					<Button
-						variant="ghost"
-						type="button"
-						onClick={() => {
-							setIsPasswordVisible((prev) => !prev);
-							inputRef.current?.focus();
-						}}
-						className="h-8 w-8 p-0"
-					>
-						{isPasswordVisible ? <EyeOff /> : <EyeIcon />}
-					</Button>
-				}
-			/>
-		</div>
-	);
+  const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  return (
+    <div className="grid gap-2">
+      <div className="flex items-center">
+        <Label htmlFor={props.id}>{label}</Label>
+        {shouldShowForgotPassword && (
+          <a
+            href="#"
+            className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+          >
+            Forgot your password?
+          </a>
+        )}
+      </div>
+      <Input
+        name={name}
+        {...props}
+        type={isPasswordVisible ? 'text' : 'password'}
+        ref={inputRef}
+        trailingComponent={
+          <Button
+            variant="ghost"
+            type="button"
+            onClick={() => {
+              setIsPasswordVisible((prev) => !prev);
+              inputRef.current?.focus();
+            }}
+            className="h-8 w-8 p-0"
+          >
+            {isPasswordVisible ? <EyeOff /> : <EyeIcon />}
+          </Button>
+        }
+      />
+    </div>
+  );
 }
 
 LoginForm.TextField = TextField;

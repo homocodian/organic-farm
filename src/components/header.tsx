@@ -1,84 +1,87 @@
-import { ShoppingCart, UserIcon } from "lucide-react";
-import Link from "next/link";
-import { Button } from "./ui/button";
-import { UserAccount } from "./user-account";
-import { AppConfig } from "@/lib/app-config";
-import { CartCount } from "@/components/cart-count";
-import { links } from "@/constants/links";
-import { HeaderMobileMenu } from "./header-mobile-menu";
-import { cn } from "@/lib/utils";
-import { Suspense } from "react";
-import { Avatar, AvatarFallback } from "./ui/avatar";
-import { Sparkles } from "lucide-react";
+import { Suspense } from 'react';
+
+import { ShoppingCart, Sparkles, UserIcon } from 'lucide-react';
+import Link from 'next/link';
+
+import { CartCount } from '@/components/cart-count';
+import { links } from '@/constants/links';
+import { AppConfig } from '@/lib/app-config';
+import { cn } from '@/lib/utils';
+
+import { HeaderMobileMenu } from './header-mobile-menu';
+import { Avatar, AvatarFallback } from './ui/avatar';
+import { Button } from './ui/button';
+import { UserAccount } from './user-account';
+
 export type HeaderProps = {
-	showCart?: boolean;
+  showCart?: boolean;
 };
 
 const linkStyles = cn(
-	"group inline-flex items-center justify-center gap-2",
-	"rounded-md px-4 py-3 text-sm leading-none",
-	"font-medium transition-colors hover:bg-accent",
-	"hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-	"focus:outline-none disabled:pointer-events-none disabled:opacity-50",
-	"data-[active]:bg-accent/50 data-[state=open]:bg-accent/50",
+  'group inline-flex items-center justify-center gap-2',
+  'rounded-md px-4 py-3 text-sm leading-none',
+  'font-medium transition-colors hover:bg-accent',
+  'hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
+  'focus:outline-none disabled:pointer-events-none disabled:opacity-50',
+  'data-[active]:bg-accent/50 data-[state=open]:bg-accent/50'
 );
 
 export function Header({ showCart = true }: HeaderProps) {
-	return (
-		<header
-			className={cn(
-				"sticky px-4 top-0 z-40 w-full border-b bg-background/95",
-				"backdrop-blur supports-[backdrop-filter]:bg-background/60",
-			)}
-		>
-			<div className="container mx-auto flex h-16 items-center justify-between">
-				<div className="flex items-center gap-6 md:gap-10">
-					<HeaderMobileMenu />
-					<Link href="/" className="items-center space-x-2 hidden md:flex">
-						<AppConfig.logo />
-						<span className="hidden font-bold sm:inline-block">
-							{AppConfig.name}
-						</span>
-					</Link>
+  return (
+    <header
+      className={cn(
+        'bg-background/95 sticky top-0 z-40 w-full border-b px-4',
+        'supports-[backdrop-filter]:bg-background/60 backdrop-blur'
+      )}
+    >
+      <div className="container mx-auto flex h-16 items-center justify-between">
+        <div className="flex items-center gap-6 md:gap-10">
+          <HeaderMobileMenu />
+          <Link href="/" className="hidden items-center space-x-2 md:flex">
+            <AppConfig.logo />
+            <span className="hidden font-bold sm:inline-block">
+              {AppConfig.name}
+            </span>
+          </Link>
 
-					<div className="flex items-center">
-						<Link href="/assistant" className={linkStyles}>
-							<Sparkles className="size-4" />
-							Assistant
-						</Link>
-						<div className="hidden md:block">
-							{links.map((link) => (
-								<Link key={link.name} href={link.href} className={linkStyles}>
-									{link.name}
-								</Link>
-							))}
-						</div>
-					</div>
-				</div>
+          <div className="flex items-center">
+            <Link href="/assistant" className={linkStyles}>
+              <Sparkles className="size-4" />
+              Assistant
+            </Link>
+            <div className="hidden md:block">
+              {links.map((link) => (
+                <Link key={link.name} href={link.href} className={linkStyles}>
+                  {link.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
 
-				<div className="flex items-center gap-4">
-					<Suspense
-						fallback={
-							<Avatar>
-								<AvatarFallback>
-									<UserIcon className="h-4 w-4" />
-								</AvatarFallback>
-							</Avatar>
-						}
-					>
-						<UserAccount />
-					</Suspense>
+        <div className="flex items-center gap-4">
+          <Suspense
+            fallback={
+              <Avatar>
+                <AvatarFallback>
+                  <UserIcon className="h-4 w-4" />
+                </AvatarFallback>
+              </Avatar>
+            }
+          >
+            <UserAccount />
+          </Suspense>
 
-					{showCart && (
-						<Button variant="outline" size="icon" className="relative" asChild>
-							<Link href="/cart">
-								<ShoppingCart className="h-5 w-5" />
-								<CartCount />
-							</Link>
-						</Button>
-					)}
-				</div>
-			</div>
-		</header>
-	);
+          {showCart && (
+            <Button variant="outline" size="icon" className="relative" asChild>
+              <Link href="/cart">
+                <ShoppingCart className="h-5 w-5" />
+                <CartCount />
+              </Link>
+            </Button>
+          )}
+        </div>
+      </div>
+    </header>
+  );
 }

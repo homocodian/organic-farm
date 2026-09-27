@@ -1,18 +1,19 @@
-"use client";
+'use client';
 
-import { Loader2 } from "lucide-react";
-import { useForm } from "@tanstack/react-form";
+import type { z } from 'zod';
 
-import { onboardingSchema } from "@/lib/schema/onboarding";
-import { useOnboardingStore } from "@/lib/store/onboarding";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import type { z } from "zod";
+import { useForm } from '@tanstack/react-form';
+import { Loader2 } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { onboardingSchema } from '@/lib/schema/onboarding';
+import { useOnboardingStore } from '@/lib/store/onboarding';
 
 const supplierFormSchema = onboardingSchema.pick({
   companyName: true,
-  license: true,
+  license: true
 });
 
 type SupplierFormSchema = z.infer<typeof supplierFormSchema>;
@@ -23,18 +24,18 @@ export function SupplierForm() {
 
   const form = useForm({
     defaultValues: {
-      companyName: "",
-      license: "" as unknown as number,
+      companyName: '',
+      license: '' as unknown as number
     } as SupplierFormSchema,
     validators: {
-      onChange: supplierFormSchema,
+      onChange: supplierFormSchema
     },
     onSubmit: async (values) => {
       // Handle form submission here
       console.log(values);
       setData(values.value);
       setCurrentStep((step) => step + 1);
-    },
+    }
   });
 
   return (
@@ -59,11 +60,11 @@ export function SupplierForm() {
               onChange={(e) => field.handleChange(e.target.value)}
             />
             {field.state.meta.errors.length > 0 ? (
-              <div className="rounded-md border border-destructive bg-destructive/10 p-4 text-destructive">
+              <div className="border-destructive bg-destructive/10 text-destructive rounded-md border p-4">
                 {field.state.meta.errors.map((error) => (
                   <div className="flex items-center gap-2" key={error?.message}>
                     <span
-                      className="h-4 w-4 flex-shrink-0 flex items-center justify-center"
+                      className="flex h-4 w-4 flex-shrink-0 items-center justify-center"
                       aria-hidden="true"
                     >
                       •
@@ -90,14 +91,14 @@ export function SupplierForm() {
               value={field.state.value}
               type="number"
               onChange={(e) => field.handleChange(e.target.valueAsNumber)}
-              className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              className="[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
             />
             {field.state.meta.errors.length > 0 ? (
-              <div className="rounded-md border border-destructive bg-destructive/10 p-4 text-destructive">
+              <div className="border-destructive bg-destructive/10 text-destructive rounded-md border p-4">
                 {field.state.meta.errors.map((error) => (
                   <div className="flex items-center gap-2" key={error?.message}>
                     <span
-                      className="h-4 w-4 flex-shrink-0 flex items-center justify-center"
+                      className="flex h-4 w-4 flex-shrink-0 items-center justify-center"
                       aria-hidden="true"
                     >
                       •

@@ -1,13 +1,14 @@
-import type { Config } from "drizzle-kit";
-import { env } from "@/env.mjs";
+import type { Config } from 'drizzle-kit';
+
+import { env } from '@/env.mjs';
 
 export default {
-  schema: "./src/server/db/schema/*.ts",
-  out: "./src/server/db/migrations",
-  dialect: "postgresql",
+  schema: './src/server/db/schema/*.ts',
+  out: './src/server/db/migrations',
+  dialect: 'postgresql',
   dbCredentials: {
-    url: env.DIRECT_DATABASE_URL,
+    url: env.DIRECT_DATABASE_URL
   },
   verbose: true,
-  strict: true,
+  strict: true
 } satisfies Config;

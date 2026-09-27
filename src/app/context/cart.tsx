@@ -1,51 +1,46 @@
-"use client";
+'use client';
 
-import { CartItem, CartStore, createCartStore } from "@/lib/store/cart";
-import React from "react";
-import { useStore } from "zustand";
-import { usePathname } from "next/navigation";
+import React from 'react';
+
+import { usePathname } from 'next/navigation';
+import { useStore } from 'zustand';
+
+import { CartItem, CartStore, createCartStore } from '@/lib/store/cart';
 
 const CartContext = React.createContext<CartStore | null>(null);
 
-type CartState = ReturnType<CartStore["getState"]>;
+type CartState = ReturnType<CartStore['getState']>;
 
 type CartProviderProps = {
-	children: React.ReactNode;
-	initialCartItems?: CartItem[];
+  children: React.ReactNode;
+  initialCartItems?: CartItem[];
 };
 
 export const CartProvider = ({
-	children,
-	initialCartItems,
+  children,
+  initialCartItems
 }: CartProviderProps) => {
-	const storeRef = React.useRef<CartStore>(null);
-	const pathname = usePathname();
+  const [cartStore] = React.useState(() => {
+    const initialCart = new Map(
+      initialCartItems?.map((item) => [item.productId, item]) ?? []
+    );
+    return createCartStore(initialCart, initialCartItems === undefined);
+  });
+  const pathname = usePathname();
 
-	if (!storeRef.current) {
-		const initialCart = new Map(
-			initialCartItems?.map((item) => [item.productId, item]) ?? [],
-		);
-		storeRef.current = createCartStore(
-			initialCart,
-			initialCartItems === undefined,
-		);
-	}
+  React.useEffect(() => {
+    if (initialCartItems === undefined && pathname !== '/cart') {
+      cartStore?.getState().fetchCart();
+    }
+  }, [initialCartItems, pathname, cartStore]);
 
-	React.useEffect(() => {
-		if (initialCartItems === undefined && pathname !== "/cart") {
-			storeRef.current?.getState().fetchCart();
-		}
-	}, [initialCartItems, pathname]);
-
-	return (
-		<CartContext.Provider value={storeRef.current}>
-			{children}
-		</CartContext.Provider>
-	);
+  return (
+    <CartContext.Provider value={cartStore}>{children}</CartContext.Provider>
+  );
 };
 
 export function useCartStore<T>(selector: (state: CartState) => T): T {
-	const store = React.useContext(CartContext);
-	if (!store) throw new Error("Missing CartContext.Provider");
-	return useStore(store, selector);
+  const store = React.useContext(CartContext);
+  if (!store) throw new Error('Missing CartContext.Provider');
+  return useStore(store, selector);
 }

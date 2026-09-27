@@ -1,18 +1,18 @@
 type Options = {
-  signal: RequestInit["signal"];
+  signal: RequestInit['signal'];
 };
 
 export async function getStream(
   prompt: string,
-  options: Partial<Options> = {},
+  options: Partial<Options> = {}
 ) {
-  const response = await fetch("/api/chat", {
-    method: "POST",
+  const response = await fetch('/api/chat', {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json'
     },
     ...options,
-    body: JSON.stringify({ prompt }),
+    body: JSON.stringify({ prompt })
   });
 
   if (!response.ok) throw new Error(response.statusText);
@@ -21,7 +21,7 @@ export async function getStream(
 }
 
 export async function* decodeStreamToText(
-  data: ReadableStream<Uint8Array> | null,
+  data: ReadableStream<Uint8Array> | null
 ): AsyncIterableIterator<string> {
   if (!data) return;
 

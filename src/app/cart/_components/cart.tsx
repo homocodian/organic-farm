@@ -1,70 +1,72 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
-import { Card, CardContent } from "@/components/ui/card";
-import { OrderSummary } from "./order-summary";
-import { CartItem } from "./cart-item";
-import { Product } from "@/server/db/schema/product";
-import { EmptyCart } from "./empty";
-import { useCartStore } from "@/app/context/cart";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart } from 'lucide-react';
+
+import { useCartStore } from '@/app/context/cart';
+import { Card, CardContent } from '@/components/ui/card';
+import { Product } from '@/server/db/schema/product';
+
+import { CartItem } from './cart-item';
+import { EmptyCart } from './empty';
+import { OrderSummary } from './order-summary';
 
 export type CartProps = {
-	items: {
-		productId: string;
-		quantity: number;
-		product: Product;
-	}[];
-	cartId: string;
+  items: {
+    productId: string;
+    quantity: number;
+    product: Product;
+  }[];
+  cartId: string;
 };
 
 export function Cart() {
-	const cart = useCartStore((state) => state.cart);
-	const cartItems = React.useMemo(() => Array.from(cart.values()), [cart]);
+  const cart = useCartStore((state) => state.cart);
+  const cartItems = React.useMemo(() => Array.from(cart.values()), [cart]);
 
-	if (cartItems.length === 0) {
-		return <EmptyCart />;
-	}
+  if (cartItems.length === 0) {
+    return <EmptyCart />;
+  }
 
-	return (
-		<>
-			<div className="flex items-center gap-2 mb-8">
-				<ShoppingCart className="h-6 w-6" />
-				<h1 className="text-3xl font-bold tracking-tight">Your Cart</h1>
-			</div>
-			<CartItems cartId="cart-id-placeholder" items={cartItems} />
-		</>
-	);
+  return (
+    <>
+      <div className="mb-8 flex items-center gap-2">
+        <ShoppingCart className="h-6 w-6" />
+        <h1 className="text-3xl font-bold tracking-tight">Your Cart</h1>
+      </div>
+      <CartItems cartId="cart-id-placeholder" items={cartItems} />
+    </>
+  );
 }
 
 function CartItems({ items: cartItems, cartId }: CartProps) {
-	if (cartItems.length === 0) {
-		return <EmptyCart />;
-	}
+  if (cartItems.length === 0) {
+    return <EmptyCart />;
+  }
 
-	return (
-		<div className="grid gap-8 lg:grid-cols-3">
-			<div className="lg:col-span-2">
-				<Card>
-					<CardContent className="p-6">
-						<div className="grid gap-6">
-							{cartItems.map((item) => (
-								<CartItem
-									key={item.productId}
-									quantity={item.quantity}
-									product={item.product}
-								/>
-							))}
-						</div>
-					</CardContent>
-				</Card>
-			</div>
+  return (
+    <div className="grid gap-8 lg:grid-cols-3">
+      <div className="lg:col-span-2">
+        <Card>
+          <CardContent className="p-6">
+            <div className="grid gap-6">
+              {cartItems.map((item) => (
+                <CartItem
+                  key={item.productId}
+                  quantity={item.quantity}
+                  product={item.product}
+                />
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
-			{/* Order Summary */}
-			<div>
-				<OrderSummary cartId={cartId} items={cartItems} />
-			</div>
-		</div>
-	);
+      {/* Order Summary */}
+      <div>
+        <OrderSummary cartId={cartId} items={cartItems} />
+      </div>
+    </div>
+  );
 }

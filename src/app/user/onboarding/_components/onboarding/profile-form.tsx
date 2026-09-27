@@ -1,55 +1,57 @@
-"use client";
+'use client';
 
-import { userRoles } from "@/server/db/schema/user";
-import { useForm } from "@tanstack/react-form";
-import { onboardingSchema } from "@/lib/schema/onboarding";
-import { Loader2 } from "lucide-react";
-import { useOnboardingStore } from "@/lib/store/onboarding";
-import { Label } from "@/components/ui/label";
+import type { z } from 'zod';
+
+import { useForm } from '@tanstack/react-form';
+import { Loader2 } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import type { z } from "zod";
+  SelectValue
+} from '@/components/ui/select';
+import { onboardingSchema } from '@/lib/schema/onboarding';
+import { useOnboardingStore } from '@/lib/store/onboarding';
+import { userRoles } from '@/server/db/schema/user';
 
 const profileFormSchema = onboardingSchema.pick({
   role: true,
   phone: true,
-  alternatePhone: true,
+  alternatePhone: true
 });
 
 type ProfileFormSchema = z.infer<typeof profileFormSchema>;
-type UserRole = ProfileFormSchema["role"];
+type UserRole = ProfileFormSchema['role'];
 
 export function ProfileForm() {
   const setCurrentStep = useOnboardingStore((state) => state.setCurrentStep);
   const setData = useOnboardingStore((state) => state.setData);
-  const role = useOnboardingStore((state) => state.role ?? "buyer");
-  const phone = useOnboardingStore((state) => state.phone ?? "");
+  const role = useOnboardingStore((state) => state.role ?? 'buyer');
+  const phone = useOnboardingStore((state) => state.phone ?? '');
   const alternatePhone = useOnboardingStore(
-    (state) => state.alternatePhone ?? "",
+    (state) => state.alternatePhone ?? ''
   );
 
   const form = useForm({
     defaultValues: {
       role,
       phone,
-      alternatePhone,
+      alternatePhone
     } as ProfileFormSchema,
     validators: {
-      onChange: profileFormSchema,
+      onChange: profileFormSchema
     },
     onSubmit: async (values) => {
       // Handle form submission here
       console.log(values);
       setData(values.value);
       setCurrentStep((step) => step + 1);
-    },
+    }
   });
 
   return (
@@ -85,11 +87,11 @@ export function ProfileForm() {
               </SelectContent>
             </Select>
             {field.state.meta.errors.length > 0 ? (
-              <div className="rounded-md border border-destructive bg-destructive/10 p-4 text-destructive">
+              <div className="border-destructive bg-destructive/10 text-destructive rounded-md border p-4">
                 {field.state.meta.errors.map((error) => (
                   <div className="flex items-center gap-2" key={error?.message}>
                     <span
-                      className="h-4 w-4 flex-shrink-0 flex items-center justify-center"
+                      className="flex h-4 w-4 flex-shrink-0 items-center justify-center"
                       aria-hidden="true"
                     >
                       •
@@ -117,11 +119,11 @@ export function ProfileForm() {
               onChange={(e) => field.handleChange(e.target.value)}
             />
             {field.state.meta.errors.length > 0 ? (
-              <div className="rounded-md border border-destructive bg-destructive/10 p-4 text-destructive">
+              <div className="border-destructive bg-destructive/10 text-destructive rounded-md border p-4">
                 {field.state.meta.errors.map((error) => (
                   <div className="flex items-center gap-2" key={error?.message}>
                     <span
-                      className="h-4 w-4 flex-shrink-0 flex items-center justify-center"
+                      className="flex h-4 w-4 flex-shrink-0 items-center justify-center"
                       aria-hidden="true"
                     >
                       •
@@ -149,11 +151,11 @@ export function ProfileForm() {
               onChange={(e) => field.handleChange(e.target.value)}
             />
             {field.state.meta.errors.length > 0 ? (
-              <div className="rounded-md border border-destructive bg-destructive/10 p-4 text-destructive">
+              <div className="border-destructive bg-destructive/10 text-destructive rounded-md border p-4">
                 {field.state.meta.errors.map((error) => (
                   <div className="flex items-center gap-2" key={error?.message}>
                     <span
-                      className="h-4 w-4 flex-shrink-0 flex items-center justify-center"
+                      className="flex h-4 w-4 flex-shrink-0 items-center justify-center"
                       aria-hidden="true"
                     >
                       •
@@ -172,7 +174,7 @@ export function ProfileForm() {
         selector={(state) => [
           state.isSubmitting,
           state.canSubmit,
-          state.values.role,
+          state.values.role
         ]}
       >
         {([isSubmitting, canSubmit, role]) => (
@@ -181,7 +183,7 @@ export function ProfileForm() {
             aria-disabled={(!canSubmit || isSubmitting) as boolean}
           >
             {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {(role as UserRole) === "buyer" ? "Continue" : "Next"}
+            {(role as UserRole) === 'buyer' ? 'Continue' : 'Next'}
           </Button>
         )}
       </form.Subscribe>

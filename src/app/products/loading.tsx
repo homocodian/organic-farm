@@ -1,6 +1,6 @@
-import { Skeleton } from "@/components/ui/skeleton";
-import { Card, CardContent } from "@/components/ui/card";
-import { Header } from "@/components/header";
+import { Header } from '@/components/header';
+import { Card, CardContent } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function ProductLoadingScreen() {
   return (
@@ -13,17 +13,17 @@ export default function ProductLoadingScreen() {
             <h1 className="text-2xl font-bold">Products</h1>
           </div>
 
-          <div className="gap-6 flex">
+          <div className="flex gap-6">
             {/* Sidebar */}
-            <div className="w-64 flex-shrink-0 hidden lg:block">
+            <div className="hidden w-64 flex-shrink-0 lg:block">
               <Card className="bg-card">
                 <CardContent className="p-6">
                   {/* Filters Header */}
-                  <Skeleton className="h-6 w-16 mb-6" />
+                  <Skeleton className="mb-6 h-6 w-16" />
 
                   {/* Category Section */}
                   <div className="mb-6">
-                    <Skeleton className="h-5 w-20 mb-4" />
+                    <Skeleton className="mb-4 h-5 w-20" />
 
                     {/* Filter Options */}
                     <div className="space-y-3">
@@ -45,7 +45,7 @@ export default function ProductLoadingScreen() {
             {/* Main Content */}
             <div className="flex-1">
               {/* Product Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {Array.from({ length: 6 }).map((_, index) => (
                   <Card key={index} className="bg-card overflow-hidden p-0">
                     <CardContent className="p-0">
@@ -53,7 +53,7 @@ export default function ProductLoadingScreen() {
                       <Skeleton className="h-48 w-full rounded-none" />
 
                       {/* Product Details */}
-                      <div className="p-4 space-y-3">
+                      <div className="space-y-3 p-4">
                         {/* Product Name */}
                         <Skeleton className="h-6 w-3/4" />
 

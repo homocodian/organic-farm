@@ -1,10 +1,10 @@
-import { google } from "@ai-sdk/google";
-import { streamText } from "ai";
-import { Hono } from "hono";
-import { stream } from "hono/streaming";
+import { google } from '@ai-sdk/google';
+import { streamText } from 'ai';
+import { Hono } from 'hono';
+import { stream } from 'hono/streaming';
 
-const googleModel = google("gemini-2.5-flash", {
-  useSearchGrounding: true,
+const googleModel = google('gemini-2.5-flash', {
+  useSearchGrounding: true
 });
 
 function getPrompt(message: string) {
@@ -35,36 +35,36 @@ function getPrompt(message: string) {
 `;
 }
 
-export const chat = new Hono().post("/", async (c) => {
+export const chat = new Hono().post('/', async (c) => {
   const { prompt } = await c.req.json();
 
   if (!prompt) {
-    return c.json({ error: "No messages provided" }, 400);
+    return c.json({ error: 'No messages provided' }, 400);
   }
 
-  c.header("Content-Type", "text/plain; charset=utf-8");
+  c.header('Content-Type', 'text/plain; charset=utf-8');
 
   try {
     const { fullStream } = streamText({
       model: googleModel,
-      prompt: getPrompt(prompt),
+      prompt: getPrompt(prompt)
     });
 
     return stream(c, async (writer) => {
       for await (const part of fullStream) {
         switch (part.type) {
-          case "text-delta": {
+          case 'text-delta': {
             writer.write(part.textDelta);
             break;
           }
 
-          case "error": {
-            console.error("Stream error:", part.error);
-            await writer.write("\n[Streaming error occurred.]\n");
+          case 'error': {
+            console.error('Stream error:', part.error);
+            await writer.write('\n[Streaming error occurred.]\n');
             break;
           }
 
-          case "finish": {
+          case 'finish': {
             break;
           }
 
@@ -77,6 +77,6 @@ export const chat = new Hono().post("/", async (c) => {
     });
   } catch (error) {
     console.log(error);
-    return c.text("Failed to generate content!", 500);
+    return c.text('Failed to generate content!', 500);
   }
 });

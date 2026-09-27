@@ -1,11 +1,12 @@
-import { cache } from "react";
-import { headers } from "next/headers";
+import { cache } from 'react';
 
-import { auth } from "./auth";
+import { headers } from 'next/headers';
+
+import { auth } from './auth';
 
 export const getCurrentUser = cache(async () => {
   const session = await auth.api.getSession({
-    headers: await headers(),
+    headers: await headers()
   });
 
   if (!session) {

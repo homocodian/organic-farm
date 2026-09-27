@@ -1,0 +1,18 @@
+# Build & Cache Directories
+.next/
+dist/
+build/
+.cache/
+
+# Package Manager & Environment Folders
+node_modules/
+.yarn/
+.npm/
+.bun/
+
+# Lockfiles
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+bun.lock
+bun.lockb

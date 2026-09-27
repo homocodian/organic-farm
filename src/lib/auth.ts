@@ -1,25 +1,26 @@
-import { betterAuth } from "better-auth";
-import { APIError } from "better-auth/api";
-import { nextCookies } from "better-auth/next-js";
-import { customSession } from "better-auth/plugins";
-import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { betterAuth } from 'better-auth';
+import { drizzleAdapter } from 'better-auth/adapters/drizzle';
+import { APIError } from 'better-auth/api';
+import { nextCookies } from 'better-auth/next-js';
+import { customSession } from 'better-auth/plugins';
 
-import { db } from "@/server/db";
-import { getUser } from "./get-user";
-import { env } from "@/env.mjs";
+import { env } from '@/env.mjs';
+import { db } from '@/server/db';
+
+import { getUser } from './get-user';
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
-    provider: "pg",
+    provider: 'pg'
   }),
   emailAndPassword: {
-    enabled: true,
+    enabled: true
   },
   socialProviders: {
     google: {
       clientId: env.GOOGLE_CLIENT_ID as string,
-      clientSecret: env.GOOGLE_CLIENT_SECRET as string,
-    },
+      clientSecret: env.GOOGLE_CLIENT_SECRET as string
+    }
   },
   // make sure nextCookies is the last plugin in the array
   plugins: [
@@ -27,8 +28,8 @@ export const auth = betterAuth({
       const currentUser = await getUser(user.id);
 
       if (!currentUser) {
-        throw new APIError("NOT_FOUND", {
-          message: "User not found.",
+        throw new APIError('NOT_FOUND', {
+          message: 'User not found.'
         });
       }
 
@@ -38,12 +39,12 @@ export const auth = betterAuth({
           ...user,
           role: currentUser.role,
           phone: currentUser.phone,
-          onboardingCompleted: currentUser.onboardingCompleted,
-        },
+          onboardingCompleted: currentUser.onboardingCompleted
+        }
       };
     }),
-    nextCookies(),
-  ],
+    nextCookies()
+  ]
 });
 
 export type Auth = typeof auth;
