@@ -11,7 +11,8 @@ const server = z.object({
   GOOGLE_CLIENT_ID: z.string().min(1),
   GOOGLE_CLIENT_SECRET: z.string().min(1),
   BETTER_AUTH_URL: z.string().min(1),
-  BETTER_AUTH_SECRET: z.string().min(1)
+  BETTER_AUTH_SECRET: z.string().min(1),
+  GOOGLE_GENERATIVE_AI_API_KEY: z.string().min(1)
 });
 
 /**
@@ -42,6 +43,7 @@ const processEnv = {
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
   BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
   BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
+  GOOGLE_GENERATIVE_AI_API_KEY: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
   NODE_ENV: process.env.NODE_ENV
 };
 
@@ -66,11 +68,7 @@ if (!!process.env.SKIP_ENV_VALIDATION === false) {
     : client.safeParse(processEnv); // on client we can only validate the ones that are exposed
 
   if (parsed.success === false) {
-    console.error(
-      '❌ Invalid environment variables:',
-      z.treeifyError(parsed.error).errors
-    );
-    throw new Error('Invalid environment variables');
+    throw new Error(z.prettifyError(parsed.error));
   }
 
   /**
