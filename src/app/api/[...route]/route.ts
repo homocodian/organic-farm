@@ -6,23 +6,24 @@ import { user } from "@/server/route/user";
 import { payment } from "@/server/route/payment";
 import { Hono } from "hono";
 import { handle } from "hono/vercel";
+import { env } from "@/env.mjs";
 
 export const runtime = "nodejs";
 
 const app = new Hono()
-	.basePath("/api")
-	.get("/info", (c) => {
-		return c.json({
-			message: `${AppConfig.name} is running on ${process.env.NODE_ENV} environment`,
-		});
-	})
-	.route("/user", user)
-	.route("/products", product)
-	.route("/payment", payment)
-	.route("/chat", chat);
+  .basePath("/api")
+  .get("/info", (c) => {
+    return c.json({
+      message: `${AppConfig.name} is running on ${env.NODE_ENV} environment`,
+    });
+  })
+  .route("/user", user)
+  .route("/products", product)
+  .route("/payment", payment)
+  .route("/chat", chat);
 
 app.on(["POST", "GET"], "/auth/*", (c) => {
-	return auth.handler(c.req.raw);
+  return auth.handler(c.req.raw);
 });
 
 const handler = handle(app);

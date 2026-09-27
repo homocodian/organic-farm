@@ -8,139 +8,140 @@ import Script from "next/script";
 import { toast } from "sonner";
 import { getRazorpay } from "@/lib/razorpay";
 import { useCartStore } from "@/app/context/cart";
+import { env } from "@/env.mjs";
 
 type OrderSummaryProps = CartProps;
 
 export function OrderSummary({ items: cartItems }: OrderSummaryProps) {
-	const subTotal = useMemo(() => {
-		return cartItems.reduce(
-			(acc, item) => acc + item.product.amount * item.quantity,
-			0,
-		);
-	}, [cartItems]);
+  const subTotal = useMemo(() => {
+    return cartItems.reduce(
+      (acc, item) => acc + item.product.amount * item.quantity,
+      0,
+    );
+  }, [cartItems]);
 
-	const shipping = 0; // Assuming free shipping for now
-	const total = subTotal + shipping;
+  const shipping = 0; // Assuming free shipping for now
+  const total = subTotal + shipping;
 
-	const [loading, setLoading] = useState(false);
-	const resetCart = useCartStore((state) => state.resetCart);
+  const [loading, setLoading] = useState(false);
+  const resetCart = useCartStore((state) => state.resetCart);
 
-	const createOrder = async () => {
-		setLoading(true);
-		try {
-			const response = await fetch("/api/payment/orders", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({
-					currency: "INR",
-					receipt: `cart_${Date.now()}`,
-				}),
-			});
-			const order = await response.json();
-			if (!response.ok)
-				throw new Error(order.error ?? "Unable to create order");
-			const Razorpay = getRazorpay();
-			if (!Razorpay) throw new Error("Razorpay checkout is unavailable");
+  const createOrder = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/payment/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          currency: "INR",
+          receipt: `cart_${Date.now()}`,
+        }),
+      });
+      const order = await response.json();
+      if (!response.ok)
+        throw new Error(order.error ?? "Unable to create order");
+      const Razorpay = getRazorpay();
+      if (!Razorpay) throw new Error("Razorpay checkout is unavailable");
 
-			const checkout = new Razorpay({
-				key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-				amount: order.amount,
-				currency: order.currency,
-				name: "Organic Farm",
-				description: "Cart checkout",
-				order_id: order.order_id,
-				handler: async (paymentResponse) => {
-					try {
-						const verification = await fetch("/api/payment/verify", {
-							method: "POST",
-							headers: { "Content-Type": "application/json" },
-							body: JSON.stringify(paymentResponse),
-						});
-						const result = await verification.json();
-						if (!verification.ok)
-							throw new Error(result.error ?? "Payment verification failed");
-						resetCart();
-						toast.success("Payment successful! Your order has been placed.");
-					} catch (error) {
-						console.error("Payment verification error:", error);
-						toast.error(
-							error instanceof Error
-								? error.message
-								: "Payment verification failed",
-						);
-					}
-				},
-				modal: {
-					ondismiss: async () => {
-						await fetch("/api/payment/failed", {
-							method: "POST",
-							headers: { "Content-Type": "application/json" },
-							body: JSON.stringify({
-								razorpay_order_id: order.order_id,
-								status: "cancelled",
-								reason: "Payment checkout was cancelled",
-							}),
-						});
-						toast.info("Payment cancelled");
-					},
-				},
-			});
-			checkout.on("payment.failed", async (failure) => {
-				await fetch("/api/payment/failed", {
-					method: "POST",
-					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({
-						razorpay_order_id: order.order_id,
-						reason:
-							failure.error?.description ?? "Payment failed. Please try again.",
-					}),
-				});
-				toast.error(
-					failure.error?.description ?? "Payment failed. Please try again.",
-				);
-			});
-			checkout.open();
-		} catch (error) {
-			toast.error(
-				error instanceof Error ? error.message : "Unable to start checkout",
-			);
-		} finally {
-			setLoading(false);
-		}
-	};
+      const checkout = new Razorpay({
+        key: env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        amount: order.amount,
+        currency: order.currency,
+        name: "Organic Farm",
+        description: "Cart checkout",
+        order_id: order.order_id,
+        handler: async (paymentResponse) => {
+          try {
+            const verification = await fetch("/api/payment/verify", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(paymentResponse),
+            });
+            const result = await verification.json();
+            if (!verification.ok)
+              throw new Error(result.error ?? "Payment verification failed");
+            resetCart();
+            toast.success("Payment successful! Your order has been placed.");
+          } catch (error) {
+            console.error("Payment verification error:", error);
+            toast.error(
+              error instanceof Error
+                ? error.message
+                : "Payment verification failed",
+            );
+          }
+        },
+        modal: {
+          ondismiss: async () => {
+            await fetch("/api/payment/failed", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                razorpay_order_id: order.order_id,
+                status: "cancelled",
+                reason: "Payment checkout was cancelled",
+              }),
+            });
+            toast.info("Payment cancelled");
+          },
+        },
+      });
+      checkout.on("payment.failed", async (failure) => {
+        await fetch("/api/payment/failed", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            razorpay_order_id: order.order_id,
+            reason:
+              failure.error?.description ?? "Payment failed. Please try again.",
+          }),
+        });
+        toast.error(
+          failure.error?.description ?? "Payment failed. Please try again.",
+        );
+      });
+      checkout.open();
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Unable to start checkout",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
-	return (
-		<>
-			<Script
-				src="https://checkout.razorpay.com/v1/checkout.js"
-				strategy="afterInteractive"
-			/>
-			<Card>
-				<CardContent className="p-6">
-					<h2 className="text-xl font-semibold mb-4">Order Summary</h2>
-					<div className="grid gap-3">
-						<div className="flex items-center justify-between">
-							<span className="text-muted-foreground">Subtotal</span>
-							<span>₹{subTotal.toFixed(2)}</span>
-						</div>
-						<div className="flex items-center justify-between">
-							<span className="text-muted-foreground">Shipping</span>
-							<span>₹{shipping.toFixed(2)}</span>
-						</div>
-						<Separator className="my-2" />
-						<div className="flex items-center justify-between font-semibold">
-							<span>Total</span>
-							<span>₹{total.toFixed(2)}</span>
-						</div>
-					</div>
-				</CardContent>
-				<CardFooter className="p-6 pt-0">
-					<Button className="w-full" onClick={createOrder} disabled={loading}>
-						{loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-						Proceed to Checkout
-					</Button>
-				</CardFooter>
-			</Card>
-		</>
-	);
+  return (
+    <>
+      <Script
+        src="https://checkout.razorpay.com/v1/checkout.js"
+        strategy="afterInteractive"
+      />
+      <Card>
+        <CardContent className="p-6">
+          <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
+          <div className="grid gap-3">
+            <div className="flex items-center justify-between">
+              <span className="text-muted-foreground">Subtotal</span>
+              <span>₹{subTotal.toFixed(2)}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-muted-foreground">Shipping</span>
+              <span>₹{shipping.toFixed(2)}</span>
+            </div>
+            <Separator className="my-2" />
+            <div className="flex items-center justify-between font-semibold">
+              <span>Total</span>
+              <span>₹{total.toFixed(2)}</span>
+            </div>
+          </div>
+        </CardContent>
+        <CardFooter className="p-6 pt-0">
+          <Button className="w-full" onClick={createOrder} disabled={loading}>
+            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            Proceed to Checkout
+          </Button>
+        </CardFooter>
+      </Card>
+    </>
+  );
 }
